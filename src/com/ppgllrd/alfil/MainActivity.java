@@ -272,9 +272,15 @@ public class MainActivity extends Activity {
             super.onActivityCreated(savedInstanceState);
 
 
-            List<StudentsListItem> listItems = new ArrayList<StudentsListItem>();
+            List<StudentsListItem> listItems = new ArrayList<StudentsListItem>(20);
+/*
             for (int i = 0; i < names.length; i++) {
                 StudentsListItem item = new StudentsListItem(images[i], names[i], descriptions[i]);
+                listItems.add(item);
+            }
+            */
+            for (int i = 1; i <= 97; i++) {
+                StudentsListItem item = new StudentsListItem(i, "nombre de "+i, "descripción de "+i);
                 listItems.add(item);
             }
 
