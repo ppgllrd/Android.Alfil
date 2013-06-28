@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:paddingTop="5.5dip"
+                android:paddingRight="1.0dip"
+                android:paddingBottom="5.5dip">
     <ImageView
             android:id="@+id/icon"
             android:layout_width="80dp"
@@ -13,20 +14,26 @@
             android:paddingRight="10dp" />
 
     <TextView
+            android:id="@+id/surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/icon"
+            android:paddingBottom="1dp"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="?android:textColorPrimary"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textSize="20dip"/>
+
+    <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/surname"
             android:layout_toRightOf="@+id/icon"
-            android:paddingBottom="10dp"
-            android:textColor="@android:color/primary_text_dark"
-            android:textSize="16dp" />
-
-    <TextView
-            android:id="@+id/desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/name"
-            android:layout_toRightOf="@+id/icon"
-            android:textColor="@android:color/secondary_text_dark"
-            android:textSize="14dp" />
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="?android:textColorSecondary"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:textSize="18dip"/>
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.ppgllrd.alfil;
 import java.util.List;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,8 @@ public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
     /*private view holder class*/
     private class ViewHolder {
         ImageView imageView;
-        TextView txtName;
-        TextView txtDesc;
+        TextView surname;
+        TextView name;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -36,8 +37,8 @@ public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.students_list_item, null);
             holder = new ViewHolder();
-            holder.txtDesc = (TextView) convertView.findViewById(R.id.desc);
-            holder.txtName = (TextView) convertView.findViewById(R.id.name);
+            holder.name = (TextView) convertView.findViewById(R.id.name);
+            holder.surname = (TextView) convertView.findViewById(R.id.surname);
             holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
             convertView.setTag(holder);
         } else {
@@ -48,14 +49,16 @@ public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
             }
         }
 
-        holder.txtDesc.setText(studentsListItem.getDesc());
-        holder.txtName.setText(studentsListItem.getName());
+        holder.surname.setText(studentsListItem.getSurn1() + " " + studentsListItem.getSurn2());
+        holder.name.setText(studentsListItem.getName());
 
         String fileName = String.format("/mnt/sdcard/alfil/mates/image_%03d.jpg", studentsListItem.getPhotoId());
         holder.imageView.setImageDrawable(null);
         LoadPhotoTask task = new LoadPhotoTask(holder.imageView);
         task.execute(fileName);
+
         holder.imageView.setTag(R.id.icon, task);
+        //holder.imageView.setImageDrawable(Drawable.createFromPath(fileName));
 
         return convertView;
     }

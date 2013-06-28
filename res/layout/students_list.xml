@@ -3,15 +3,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:divider="#ffffff">
+              android:layout_height="match_parent">
 
     <ListView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@android:id/list"
-            android:background="@android:color/black"
-            android:divider="#ffaaaaaa"
-            android:dividerHeight="1dp"
-            android:drawSelectorOnTop="true"/>
+            android:background="#ff111111"
+            android:divider="#ff333333"
+            android:dividerHeight="1.0dip"
+            android:drawSelectorOnTop="true"
+            android:fastScrollEnabled="true"
+
+            />
 </LinearLayout>

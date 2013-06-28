@@ -34,42 +34,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.ppgllrd.alfil.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This example illustrates a common usage of the DrawerLayout widget
- * in the Android support library.
- * <p/>
- * <p>When a navigation (left) drawer is present, the host activity should detect presses of
- * the action bar's Up affordance as a signal to open and close the navigation drawer. The
- * ActionBarDrawerToggle facilitates this behavior.
- * Items within the drawer should fall into one of two categories:</p>
- * <p/>
- * <ul>
- * <li><strong>View switches</strong>. A view switch follows the same basic policies as
- * list or tab navigation in that a view switch does not create navigation history.
- * This pattern should only be used at the root activity of a task, leaving some form
- * of Up navigation active for activities further down the navigation hierarchy.</li>
- * <li><strong>Selective Up</strong>. The drawer allows the user to choose an alternate
- * parent for Up navigation. This allows a user to jump across an app's navigation
- * hierarchy at will. The application should treat this as it treats Up navigation from
- * a different task, replacing the current task stack using TaskStackBuilder or similar.
- * This is the only form of navigation drawer that should be used outside of the root
- * activity of a task.</li>
- * </ul>
- * <p/>
- * <p>Right side drawers should be used for actions, not navigation. This follows the pattern
- * established by the Action Bar that navigation should be to the left and actions to the right.
- * An action should be an operation performed on the current contents of the window,
- * for example enabling or disabling a data overlay on top of the current content.</p>
- */
 public class MainActivity extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -77,23 +48,35 @@ public class MainActivity extends Activity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mPlanetTitles;
+    private List<DrawerItem> coursesTitles;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.alfil);
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+        //coursesTitles = getResources().getStringArray(R.array.planets_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+
+
+        coursesTitles = new ArrayList<DrawerItem>();
+        coursesTitles.add(new DrawerSection("Asignaturas"));
+
+        coursesTitles.add(new DrawerCourse("Matemáticas"));
+        coursesTitles.add(new DrawerCourse("Estructuras"));
+        coursesTitles.add(new DrawerCourse("Algoritmos"));
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setAdapter(new DrawerAdapter(this,
+                R.layout.drawer_course_item, coursesTitles));
+
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -122,7 +105,7 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(1);
         }
     }
 
@@ -176,19 +159,21 @@ public class MainActivity extends Activity {
     }
 
     private void selectItem(int position) {
-        // update the main content by replacing fragments
-        Fragment fragment = new StudentsListFragment();
-        Bundle args = new Bundle();
-        args.putInt(StudentsListFragment.ARG_GROUP_NUMBER, position);
-        fragment.setArguments(args);
+        if( coursesTitles.get(position) instanceof DrawerCourse) {
+            // update the main content by replacing fragments
+            Fragment fragment = new StudentsListFragment();
+            Bundle args = new Bundle();
+            args.putInt(StudentsListFragment.ARG_GROUP_NUMBER, position);
+            fragment.setArguments(args);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(position, true);
+            setTitle( ((DrawerCourse) coursesTitles.get(position)).getCourseName() );
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 
     @Override
@@ -250,20 +235,14 @@ public class MainActivity extends Activity {
     public static class StudentsListFragment extends ListFragment {
         public static final String ARG_GROUP_NUMBER = "group_number";
 
-        public static final String[] names = new String[] { "Tierra",
-                "Jupiter", "Marte", "Mercurio" };
 
-        public static final String[] descriptions = new String[] {
-                "XXX",
-                "YYY", "ZZZ",
-                "VVV" };
 
-//        public static final Integer[] images = { R.drawable.earth,
-//                R.drawable.jupiter, R.drawable.mars, R.drawable.mercury };
-        public static final Integer[] images = { 1,2,3,4 };
+
+        private final List<StudentsListItem> listItems;
 
         public StudentsListFragment() {
-            // Empty constructor required for fragment subclasses
+            listItems = new ArrayList<StudentsListItem>();
+
         }
 
 
@@ -272,20 +251,131 @@ public class MainActivity extends Activity {
             super.onActivityCreated(savedInstanceState);
 
 
-            List<StudentsListItem> listItems = new ArrayList<StudentsListItem>(20);
-/*
-            for (int i = 0; i < names.length; i++) {
-                StudentsListItem item = new StudentsListItem(images[i], names[i], descriptions[i]);
-                listItems.add(item);
-            }
-            */
-            for (int i = 1; i <= 97; i++) {
-                StudentsListItem item = new StudentsListItem(i, "nombre de "+i, "descripción de "+i);
-                listItems.add(item);
-            }
 
+            /*
+            final StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
+            setListAdapter(adapter);
+
+            MainActivity.this.mDrawerList.run(new Runnable() {
+                public void run() {
+                    StudentsListItem.readFromFile(listItems, adapter, "mnt/sdcard/alfil/mates/alumnos.txt");
+                    adapter.notifyDataSetChanged();
+                }
+            });
+*/
+
+
+
+/*
+
+            public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, StudentsListViewAdapter>{
+                Context context;
+                ProgressDialog pDialog;
+
+                StudentsListViewAdapter adapter;
+
+                public LoadStudentsListViewTask(Context context){
+                    this.context = context;
+                }
+
+                @Override
+                protected void onPreExecute() {
+                    // TODO Auto-generated method stub
+                    super.onPreExecute();
+
+                    pDialog = new ProgressDialog(context);
+                    pDialog.setMessage("Cargando Lista");
+                    pDialog.setCancelable(true);
+                    pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    pDialog.show();
+                    adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
+                    setListAdapter(adapter);
+                }
+
+                @Override
+                protected StudentsListViewAdapter doInBackground(Void... arg0) {
+                    // TODO Auto-generated method stub
+
+                    listItems.clear();
+                    StudentsListItem.readFromFile(this, listItems, "mnt/sdcard/alfil/mates/alumnos.txt");
+
+                    StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
+                    return adapter;
+                }
+
+
+                @Override
+                protected void onProgressUpdate(StudentsListItem... items) {
+                    //adapter.add(items[0]);
+                }
+
+
+                @Override
+                protected void onPostExecute(StudentsListViewAdapter adapter) {
+                    // TODO Auto-generated method stub
+                    super.onPostExecute(adapter);
+                    //setListAdapter(adapter);
+
+                    pDialog.dismiss();
+                }
+
+            }
+*/
+
+
+            listItems.clear();
             StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
             setListAdapter(adapter);
+
+            new LoadStudentsListViewTask(getActivity(), listItems, adapter, this).execute();
+
+
+
+
+
+
+
+
+
+
+
+
+            //adapter.notifyDataSetChanged();
+
+
+            /*
+            new AsyncTask<String, List<StudentsListItem>, List<StudentsListItem>>() {
+
+                protected List<StudentsListItem> doInBackground(String... params) {
+                   StudentsListItem.readFromFile(listItems, "mnt/sdcard/alfil/mates/alumnos.txt");
+
+                    return listItems;
+                }
+
+                protected void onProgressUpdate(List<StudentsListItem>... progress) {
+                 //   adapter.notifyDataSetChanged();
+                }
+
+
+                @Override
+                protected void onPostExecute(List<StudentsListItem> listItems) {
+                    if(listItems != null) {
+
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }.execute();
+*/
+
+
+
+
+
+
+
+
+
+
 
 
 

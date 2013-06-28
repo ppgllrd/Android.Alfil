@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="DrawerItem">
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:gravity">left|center</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingRight">5dip</item>
+    </style>
+
+    <style name="DrawerCourse" parent="DrawerItem">
+        <item name="android:background">#FF151515</item>
+        <item name="android:layout_marginBottom">2dip</item>
+        <item name="android:layout_marginTop">2dip</item>
+        <item name="android:layout_marginLeft">4dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+    </style>
+
+    <style name="DrawerCourseText" parent="DrawerCourse">
+        <item name="android:textSize">18.0sp</item>
+        <item name="android:textColor">#FFffffff</item>
+    </style>
+
+    <style name="DrawerSection" parent="DrawerItem">
+        <item name="android:background">#FF101010</item>
+        <item name="android:layout_marginBottom">2dip</item>
+        <item name="android:layout_marginTop">2dip</item>
+        <item name="android:layout_marginLeft">10dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+    </style>
+
+    <style name="DrawerSectionText" parent="DrawerSection">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">#FF888888</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+</resources>

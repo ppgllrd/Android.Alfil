@@ -15,6 +15,7 @@ public class LoadPhotoTask extends AsyncTask<String, Void, Drawable> {
     }
 
     protected Drawable doInBackground(String... params) {
+        //Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
         Drawable drawable = null;
         if(isCancelled()) {
             return drawable;
