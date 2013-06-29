@@ -17,6 +17,7 @@ public class Course {
 
     private static final String photoTemplate = "image_%03d.jpg";
 
+    private static final String dataFile = "alumnos.txt";
 
     private String folder;
     private String name;
@@ -48,7 +49,7 @@ public class Course {
 
 
     public String getStudentsFileName() {
-        return sdCardAlfil+"/"+folder+"/"+"alumnos.txt";
+        return sdCardAlfil+"/"+folder+"/"+dataFile;
     }
 
     public String getPhotosTemplate() {
