@@ -3,7 +3,6 @@ package com.ppgllrd.alfil;
 import java.util.List;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,12 @@ import android.widget.TextView;
  */
 public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
     Context context;
+    String formatPhoto;
 
-    public StudentsListViewAdapter(Context context, int resourceId, List<StudentsListItem> items) {
+    public StudentsListViewAdapter(Context context, int resourceId, List<StudentsListItem> items, String formatPhoto) {
         super(context, resourceId, items);
         this.context = context;
+        this.formatPhoto = formatPhoto;
     }
 
     /*private view holder class*/
@@ -49,10 +50,10 @@ public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
             }
         }
 
-        holder.surname.setText(studentsListItem.getSurn1() + " " + studentsListItem.getSurn2());
+        holder.surname.setText(studentsListItem.getSurname1() + " " + studentsListItem.getSurname2());
         holder.name.setText(studentsListItem.getName());
 
-        String fileName = String.format("/mnt/sdcard/alfil/mates/image_%03d.jpg", studentsListItem.getPhotoId());
+        String fileName = String.format(formatPhoto, studentsListItem.getPhotoId());
         holder.imageView.setImageDrawable(null);
         LoadPhotoTask task = new LoadPhotoTask(holder.imageView);
         task.execute(fileName);

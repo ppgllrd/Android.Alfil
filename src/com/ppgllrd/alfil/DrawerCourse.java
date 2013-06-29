@@ -11,24 +11,21 @@ import android.widget.TextView;
  * Created by pepeg on 28/06/13.
  */
 public class DrawerCourse extends DrawerItem {
-    private String courseName;
+    private Course course;
 
 
-    public DrawerCourse(String courseName) {
-        this.courseName = courseName;
+    public DrawerCourse(Course course) {
+        this.course = course;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
 
     @Override
     public String toString() {
-        return courseName;
+        return course.getName();
     }
 
     /*private view holder class*/
@@ -52,7 +49,7 @@ public class DrawerCourse extends DrawerItem {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.text.setText(getCourseName());
+        holder.text.setText(getCourse().getName());
         holder.imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.drawer_circle));
         return convertView;
     }

@@ -14,43 +14,37 @@ import java.util.Scanner;
  */
 public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, Void> {
     Context context;
-//    ProgressDialog pDialog;
-    MainActivity.StudentsListFragment lf;
-    StudentsListViewAdapter adapter;
     List<StudentsListItem> listItems;
+    StudentsListViewAdapter adapter;
+    MainActivity.StudentsListFragment listFragment;
+    File studentsFile;
+    // ProgressDialog pDialog;
 
-
-    public LoadStudentsListViewTask(Context context, List<StudentsListItem> listItems, StudentsListViewAdapter adapter, MainActivity.StudentsListFragment lf){
+    public LoadStudentsListViewTask(Context context, List<StudentsListItem> listItems, StudentsListViewAdapter adapter, MainActivity.StudentsListFragment listFragment, File studentsFile){
         this.context = context;
-        this.lf = lf;
         this.listItems = listItems;
         this.adapter = adapter;
+        this.listFragment = listFragment;
+        this.studentsFile = studentsFile;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
-     //   pDialog = new ProgressDialog(context);
+ //   pDialog = new ProgressDialog(context);
      //   pDialog.setMessage("Cargando Lista");
      //   pDialog.setCancelable(true);
      //   pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-       // pDialog.show();
-
-
-;
+     // pDialog.show();
     }
 
     @Override
     protected Void doInBackground(Void... arg0) {
-        // TODO Auto-generated method stub
-
         //Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 
-        File fp = new File("mnt/sdcard/alfil/mates/alumnos.txt");
         int i = 1;
         try {
-            Scanner sc = new Scanner(fp);
+            Scanner sc = new Scanner(studentsFile);
             while(sc.hasNext()) {
                 String surn1 = StringUtils.uppercase(sc.nextLine());
                 String surn2 = StringUtils.uppercase(sc.nextLine());
@@ -66,31 +60,22 @@ public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, 
             }
             sc.close();
         } catch (Exception e) {
-            Log.d("com.ppgllrd.alfil", "Exception:", e);
+            Log.d(LoadStudentsListViewTask.class.getName(), "Exception:", e);
         }
-
         return null;
-
     }
 
-
-    private int addedItems = 0;
     @Override
     protected void onProgressUpdate(StudentsListItem... items) {
         listItems.add(items[0]);
-        addedItems++;
-        if(addedItems %20==0)
+        if(listItems.size() % 20 == 0)
           adapter.notifyDataSetChanged();
     }
 
-
     @Override
     protected void onPostExecute(Void v) {
-        // TODO Auto-generated method stub
         super.onPostExecute(v);
         adapter.notifyDataSetChanged();
-
        // pDialog.dismiss();
     }
-
 }

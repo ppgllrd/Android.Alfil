@@ -27,13 +27,13 @@ public class StudentsListItem {
     public void setPhotoId(int photoId) {
         this.photoId = photoId;
     }
-    public String getSurn1() {
+    public String getSurname1() {
         return surn1;
     }
     public void setSurn1(String surn1) {
         this.surn1 = surn1;
     }
-    public String getSurn2() {
+    public String getSurname2() {
         return surn2;
     }
     public void setSurn2(String surn2) {

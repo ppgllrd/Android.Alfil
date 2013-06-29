@@ -31,7 +31,7 @@
     </style>
 
     <style name="DrawerSectionText" parent="DrawerSection">
-        <item name="android:textSize">14.0sp</item>
+        <item name="android:textSize">16.0sp</item>
         <item name="android:textColor">#FF888888</item>
         <item name="android:textAllCaps">true</item>
     </style>

@@ -10,8 +10,8 @@ import android.widget.ImageView;
 public class LoadPhotoTask extends AsyncTask<String, Void, Drawable> {
     private ImageView imageView;
 
-    public LoadPhotoTask(ImageView iv) {
-        imageView = iv;
+    public LoadPhotoTask(ImageView imageView) {
+        this.imageView = imageView;
     }
 
     protected Drawable doInBackground(String... params) {

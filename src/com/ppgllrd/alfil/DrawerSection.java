@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -12,7 +11,6 @@ import android.widget.TextView;
  */
 public class DrawerSection extends DrawerItem {
     private String sectionText;
-
 
     public DrawerSection(String sectionText) {
         this.sectionText = sectionText;
@@ -22,10 +20,6 @@ public class DrawerSection extends DrawerItem {
         return sectionText;
     }
 
-    public void setSectionText(String sectionText) {
-        this.sectionText = sectionText;
-    }
-
     @Override
     public String toString() {
         return sectionText;
@@ -33,9 +27,8 @@ public class DrawerSection extends DrawerItem {
 
     /*private view holder class*/
     private class ViewHolder {
-        TextView text;
+        TextView textView;
     }
-
 
     public View getView(Context context, View convertView) {
         ViewHolder holder = null;
@@ -44,13 +37,13 @@ public class DrawerSection extends DrawerItem {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.drawer_section_item, null);
             holder = new ViewHolder();
-            holder.text = (TextView) convertView.findViewById(R.id.drawer_sectionText);
+            holder.textView = (TextView) convertView.findViewById(R.id.drawer_sectionText);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.text.setText(getSectionText());
+        holder.textView.setText(getSectionText());
         return convertView;
     }
 }

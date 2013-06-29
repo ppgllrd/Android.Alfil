@@ -38,46 +38,41 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends Activity {
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
+    private ActionBarDrawerToggle drawerToggle;
 
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
-    private List<DrawerItem> coursesTitles;
-
-
+    private CharSequence drawerTitle;
+    private CharSequence appTitle;
+    private List<DrawerItem> drawerItems;
+    int drawerSelectedIdx = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alfil);
 
-        mTitle = mDrawerTitle = getTitle();
-        //coursesTitles = getResources().getStringArray(R.array.planets_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        appTitle = drawerTitle = getTitle();
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerList = (ListView) findViewById(R.id.left_drawer);
 
-
-
-        coursesTitles = new ArrayList<DrawerItem>();
-        coursesTitles.add(new DrawerSection("Asignaturas"));
-
-        coursesTitles.add(new DrawerCourse("Matemáticas"));
-        coursesTitles.add(new DrawerCourse("Estructuras"));
-        coursesTitles.add(new DrawerCourse("Algoritmos"));
+        drawerItems = new ArrayList<DrawerItem>();
+        drawerItems.add(new DrawerSection("Asignaturas"));
+        for(Course course : Course.getCourses())
+            drawerItems.add(new DrawerCourse(course));
 
         // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new DrawerAdapter(this,
-                R.layout.drawer_course_item, coursesTitles));
+        drawerList.setAdapter(new DrawerAdapter(this,
+                R.layout.drawer_course_item, drawerItems));
 
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,27 +80,27 @@ public class MainActivity extends Activity {
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
+        drawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
+                drawerLayout,         /* DrawerLayout object */
                 R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
                 ) {
             public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
+                getActionBar().setTitle(appTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
+                getActionBar().setTitle(drawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        drawerLayout.setDrawerListener(drawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(1);
+            selectItem(1); // start by selecting first course
         }
     }
 
@@ -120,7 +115,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
         menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -129,7 +124,7 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
          // The action bar home/up action should open or close the drawer.
          // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         // Handle action buttons
@@ -159,27 +154,37 @@ public class MainActivity extends Activity {
     }
 
     private void selectItem(int position) {
-        if( coursesTitles.get(position) instanceof DrawerCourse) {
+        boolean isSelectable = drawerItems.get(position) instanceof DrawerCourse;
+
+        if(position != drawerSelectedIdx && drawerItems.get(position) instanceof DrawerCourse) {
+            DrawerCourse drawerCourse = (DrawerCourse) drawerItems.get(position);
+            drawerSelectedIdx = position;
+
             // update the main content by replacing fragments
             Fragment fragment = new StudentsListFragment();
             Bundle args = new Bundle();
             args.putInt(StudentsListFragment.ARG_GROUP_NUMBER, position);
+            args.putString(StudentsListFragment.ARG_GROUP_STUDENTS_FILE, drawerCourse.getCourse().getStudentsFileName());
+            args.putString(StudentsListFragment.ARG_GROUP_PHOTO_TEMPLATE, drawerCourse.getCourse().getPhotosTemplate());
+
+
             fragment.setArguments(args);
 
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-            // update selected item and title, then close the drawer
-            mDrawerList.setItemChecked(position, true);
-            setTitle( ((DrawerCourse) coursesTitles.get(position)).getCourseName() );
-            mDrawerLayout.closeDrawer(mDrawerList);
+            // update selected item and appTitle, then close the drawer
+            //drawerList.setItemChecked(position, true);
+            setTitle(drawerCourse.getCourse().getName());
         }
+        if(isSelectable)
+            drawerLayout.closeDrawer(drawerList);
     }
 
     @Override
     public void setTitle(CharSequence title) {
-        mTitle = title;
-        getActionBar().setTitle(mTitle);
+        this.appTitle = title;
+        getActionBar().setTitle(this.appTitle);
     }
 
     /**
@@ -191,202 +196,41 @@ public class MainActivity extends Activity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
+        drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
-
-    /**
-     * Fragment that appears in the "content_frame", shows a planet
-     */
-/*
-    public static class PlanetFragment extends Fragment {
-        public static final String ARG_GROUP_NUMBER = "planet_number";
-
-        public PlanetFragment() {
-            // Empty constructor required for fragment subclasses
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
-            int i = getArguments().getInt(ARG_GROUP_NUMBER);
-            String planet = getResources().getStringArray(R.array.planets_array)[i];
-
-            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
-                            "drawable", getActivity().getPackageName());
-            ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
-            getActivity().setName(planet);
-            return rootView;
-        }
-    }
-*/
-
 
     /**
      * Fragment that appears in the "content_frame", shows a planet
      */
     public static class StudentsListFragment extends ListFragment {
-        public static final String ARG_GROUP_NUMBER = "group_number";
-
-
-
+        private static final String ARG_GROUP_NUMBER = "group_number";
+        private static final String ARG_GROUP_STUDENTS_FILE = "group_students_file";
+        private static final String ARG_GROUP_PHOTO_TEMPLATE = "group_students_photo";
 
         private final List<StudentsListItem> listItems;
 
         public StudentsListFragment() {
             listItems = new ArrayList<StudentsListItem>();
-
         }
-
 
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
-
-
-            /*
-            final StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
-            setListAdapter(adapter);
-
-            MainActivity.this.mDrawerList.run(new Runnable() {
-                public void run() {
-                    StudentsListItem.readFromFile(listItems, adapter, "mnt/sdcard/alfil/mates/alumnos.txt");
-                    adapter.notifyDataSetChanged();
-                }
-            });
-*/
-
-
-
-/*
-
-            public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, StudentsListViewAdapter>{
-                Context context;
-                ProgressDialog pDialog;
-
-                StudentsListViewAdapter adapter;
-
-                public LoadStudentsListViewTask(Context context){
-                    this.context = context;
-                }
-
-                @Override
-                protected void onPreExecute() {
-                    // TODO Auto-generated method stub
-                    super.onPreExecute();
-
-                    pDialog = new ProgressDialog(context);
-                    pDialog.setMessage("Cargando Lista");
-                    pDialog.setCancelable(true);
-                    pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    pDialog.show();
-                    adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
-                    setListAdapter(adapter);
-                }
-
-                @Override
-                protected StudentsListViewAdapter doInBackground(Void... arg0) {
-                    // TODO Auto-generated method stub
-
-                    listItems.clear();
-                    StudentsListItem.readFromFile(this, listItems, "mnt/sdcard/alfil/mates/alumnos.txt");
-
-                    StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
-                    return adapter;
-                }
-
-
-                @Override
-                protected void onProgressUpdate(StudentsListItem... items) {
-                    //adapter.add(items[0]);
-                }
-
-
-                @Override
-                protected void onPostExecute(StudentsListViewAdapter adapter) {
-                    // TODO Auto-generated method stub
-                    super.onPostExecute(adapter);
-                    //setListAdapter(adapter);
-
-                    pDialog.dismiss();
-                }
-
-            }
-*/
-
-
+            Bundle bundle = this.getArguments();
+            String fileName = bundle.getString(ARG_GROUP_STUDENTS_FILE);
             listItems.clear();
-            StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(),R.layout.students_list_item, listItems);
+            StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(), R.layout.students_list_item, listItems, bundle.getString(ARG_GROUP_PHOTO_TEMPLATE));
             setListAdapter(adapter);
 
-            new LoadStudentsListViewTask(getActivity(), listItems, adapter, this).execute();
-
-
-
-
-
-
-
-
-
-
-
-
-            //adapter.notifyDataSetChanged();
-
-
-            /*
-            new AsyncTask<String, List<StudentsListItem>, List<StudentsListItem>>() {
-
-                protected List<StudentsListItem> doInBackground(String... params) {
-                   StudentsListItem.readFromFile(listItems, "mnt/sdcard/alfil/mates/alumnos.txt");
-
-                    return listItems;
-                }
-
-                protected void onProgressUpdate(List<StudentsListItem>... progress) {
-                 //   adapter.notifyDataSetChanged();
-                }
-
-
-                @Override
-                protected void onPostExecute(List<StudentsListItem> listItems) {
-                    if(listItems != null) {
-
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-            }.execute();
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-            String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                    "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                    "Linux", "OS/2" };
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1, values);
-            setListAdapter(adapter);
-            */
+            new LoadStudentsListViewTask(getActivity(), listItems, adapter, this, new File(fileName)).execute();
         }
 
         @Override
@@ -395,23 +239,11 @@ public class MainActivity extends Activity {
 
         }
 
-
-
-
-
-
-
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.students_list, null);
-//            tableFixHeaders = (TableFixHeaders) content.findViewById(R.id.listView);
-//            int i = getArguments().getInt(ARG_GROUP_NUMBER);
-//            getActivity().setName("hola");
             return rootView;
         }
-
     }
-
 }
