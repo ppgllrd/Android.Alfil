@@ -16,4 +16,16 @@ public class StringUtils {
         }
         return result.toString();
     }
+
+    public static String removeAccents(String s0) {
+        char[] accents = new char[]{'á','é','í','ó','ú','Á','É','Í','Ó','Ú'};
+        char[] noAccents = new char[]{'a','e','i','o','u','A','E','I','O','U'};
+
+        String s1 = s0;
+        for(int i = 0; i < accents.length; i++)
+          s1 = s1.replace(accents[i],noAccents[i]);
+        return s1;
+    }
+
+
 }

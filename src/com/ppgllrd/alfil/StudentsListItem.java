@@ -47,7 +47,7 @@ public class StudentsListItem {
     }
     @Override
     public String toString() {
-        return name + "\n" + surn1;
+        return StringUtils.removeAccents(name + " " + surn1 + " " + surn2); //BEWARE: this string is used for filtering the listview
     }
 
 

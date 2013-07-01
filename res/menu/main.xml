@@ -19,4 +19,13 @@
           android:icon="@drawable/action_search"
           android:name="@string/action_websearch"
           android:showAsAction="ifRoom|withText" />
+    <item android:id="@+id/search_box"
+          android:title="@string/menu_search"
+          android:icon="@drawable/action_search"
+          android:showAsAction="ifRoom|collapseActionView"
+          android:actionViewClass="android.widget.SearchView" />
+
+
+
+
 </menu>

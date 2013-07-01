@@ -27,6 +27,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,9 +36,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 
 import java.io.File;
 import java.util.ArrayList;
@@ -216,6 +218,9 @@ public class MainActivity extends Activity {
 
         private final List<StudentsListItem> listItems;
 
+        private TextWatcher filterTextWatcher;
+        private EditText filterText;
+
         public StudentsListFragment() {
             listItems = new ArrayList<StudentsListItem>();
         }
@@ -227,9 +232,27 @@ public class MainActivity extends Activity {
             Bundle bundle = this.getArguments();
             String fileName = bundle.getString(ARG_GROUP_STUDENTS_FILE);
             listItems.clear();
-            StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(), R.layout.students_list_item, listItems, bundle.getString(ARG_GROUP_PHOTO_TEMPLATE));
+            final StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(), R.layout.students_list_item, listItems, bundle.getString(ARG_GROUP_PHOTO_TEMPLATE));
             setListAdapter(adapter);
+            //adapter.getFilter().filter();
+            filterText = (EditText) getActivity().findViewById(R.id.search_box);
+            filterTextWatcher = new TextWatcher() {
 
+                public void afterTextChanged(Editable s) {
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count,
+                                              int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before,
+                                          int count) {
+                    adapter.getFilter().filter(StringUtils.removeAccents(s.toString().trim()));
+                    //Note that filter uses toString in StudentsListItem
+                }
+
+            };
+            filterText.addTextChangedListener(filterTextWatcher);
             new LoadStudentsListViewTask(getActivity(), listItems, adapter, this, new File(fileName)).execute();
         }
 
@@ -245,5 +268,11 @@ public class MainActivity extends Activity {
             View rootView = inflater.inflate(R.layout.students_list, null);
             return rootView;
         }
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            filterText.removeTextChangedListener(filterTextWatcher);
+        }
+
     }
 }
