@@ -21,6 +21,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +40,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -53,6 +56,9 @@ public class MainActivity extends Activity {
     private CharSequence appTitle;
     private List<DrawerItem> drawerItems;
     int drawerSelectedIdx = -1;
+
+    StudentsListFragment fragment = null;
+    int currentapiVersion = android.os.Build.VERSION.SDK_INT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +112,13 @@ public class MainActivity extends Activity {
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        if(fragment!=null)
+            fragment.setOnQueryTestListener(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -118,7 +127,8 @@ public class MainActivity extends Activity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
-        menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+        menu.findItem(R.id.search_box).setVisible(!drawerOpen);
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -129,6 +139,8 @@ public class MainActivity extends Activity {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        return super.onOptionsItemSelected(item);
+        /*
         // Handle action buttons
         switch(item.getItemId()) {
         case R.id.action_websearch:
@@ -145,6 +157,7 @@ public class MainActivity extends Activity {
         default:
             return super.onOptionsItemSelected(item);
         }
+        */
     }
 
     /* The click listner for ListView in the navigation drawer */
@@ -163,7 +176,7 @@ public class MainActivity extends Activity {
             drawerSelectedIdx = position;
 
             // update the main content by replacing fragments
-            Fragment fragment = new StudentsListFragment();
+            fragment = new StudentsListFragment();
             Bundle args = new Bundle();
             args.putInt(StudentsListFragment.ARG_GROUP_NUMBER, position);
             args.putString(StudentsListFragment.ARG_GROUP_STUDENTS_FILE, drawerCourse.getCourse().getStudentsFileName());
@@ -204,25 +217,80 @@ public class MainActivity extends Activity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
+        // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
     /**
      * Fragment that appears in the "content_frame", shows a planet
      */
-    public static class StudentsListFragment extends ListFragment {
+    public class StudentsListFragment extends ListFragment {
         private static final String ARG_GROUP_NUMBER = "group_number";
         private static final String ARG_GROUP_STUDENTS_FILE = "group_students_file";
         private static final String ARG_GROUP_PHOTO_TEMPLATE = "group_students_photo";
 
         private final List<StudentsListItem> listItems;
 
-        private TextWatcher filterTextWatcher;
-        private EditText filterText;
+        StudentsListViewAdapter adapter;
 
         public StudentsListFragment() {
             listItems = new ArrayList<StudentsListItem>();
+        }
+
+
+
+        private boolean setFilter(String query) {
+            adapter.getFilter().filter(StringUtils.removeAccents(query.toString().trim()));
+            //Note that filter uses toString in StudentsListItem
+            return true;
+        }
+
+        private boolean unsetFilter() {
+            adapter.getFilter().filter("");
+            //Note that filter uses toString in StudentsListItem
+            return true;
+        }
+
+        public void setOnQueryTestListener(Menu menu) {
+            SearchView searchView = (SearchView) menu.findItem(R.id.search_box).getActionView();
+            if (searchView != null) {
+                SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+                searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+                searchView.setIconifiedByDefault(true);
+                SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+                    public boolean onQueryTextChange(String newText) {
+                        return setFilter(newText);
+                    }
+                    public boolean onQueryTextSubmit(String query) {
+                        return setFilter(query);
+                    }
+                };
+                searchView.setOnQueryTextListener(queryTextListener);
+
+                if (currentapiVersion >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                    MenuItem menuItem = menu.findItem(R.id.search_box);
+                    menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+                        @Override
+                        public boolean onMenuItemActionCollapse(MenuItem item) {
+                            // Return true to collapse action view
+                            return unsetFilter();
+                        }
+
+                        @Override
+                        public boolean onMenuItemActionExpand(MenuItem item) {
+                            return true;
+                        }
+                    });
+                } else {
+                    searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+                        @Override
+                        public boolean onClose() {
+                            unsetFilter();
+                            return false; //to clear and dismiss
+                        }
+                    });
+                }
+            }
         }
 
         @Override
@@ -232,27 +300,8 @@ public class MainActivity extends Activity {
             Bundle bundle = this.getArguments();
             String fileName = bundle.getString(ARG_GROUP_STUDENTS_FILE);
             listItems.clear();
-            final StudentsListViewAdapter adapter = new StudentsListViewAdapter(getActivity(), R.layout.students_list_item, listItems, bundle.getString(ARG_GROUP_PHOTO_TEMPLATE));
+            adapter = new StudentsListViewAdapter(getActivity(), R.layout.students_list_item, listItems, bundle.getString(ARG_GROUP_PHOTO_TEMPLATE));
             setListAdapter(adapter);
-            //adapter.getFilter().filter();
-            filterText = (EditText) getActivity().findViewById(R.id.search_box);
-            filterTextWatcher = new TextWatcher() {
-
-                public void afterTextChanged(Editable s) {
-                }
-
-                public void beforeTextChanged(CharSequence s, int start, int count,
-                                              int after) {
-                }
-
-                public void onTextChanged(CharSequence s, int start, int before,
-                                          int count) {
-                    adapter.getFilter().filter(StringUtils.removeAccents(s.toString().trim()));
-                    //Note that filter uses toString in StudentsListItem
-                }
-
-            };
-            filterText.addTextChangedListener(filterTextWatcher);
             new LoadStudentsListViewTask(getActivity(), listItems, adapter, this, new File(fileName)).execute();
         }
 
@@ -271,7 +320,7 @@ public class MainActivity extends Activity {
         @Override
         public void onDestroy() {
             super.onDestroy();
-            filterText.removeTextChangedListener(filterTextWatcher);
+//            filterText.removeTextChangedListener(filterTextWatcher);
         }
 
     }
