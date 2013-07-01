@@ -16,11 +16,11 @@ public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, 
     Context context;
     List<StudentsListItem> listItems;
     StudentsListViewAdapter adapter;
-    MainActivity.StudentsListFragment listFragment;
+    StudentsListFragment listFragment;
     File studentsFile;
     // ProgressDialog pDialog;
 
-    public LoadStudentsListViewTask(Context context, List<StudentsListItem> listItems, StudentsListViewAdapter adapter, MainActivity.StudentsListFragment listFragment, File studentsFile){
+    public LoadStudentsListViewTask(Context context, List<StudentsListItem> listItems, StudentsListViewAdapter adapter, StudentsListFragment listFragment, File studentsFile){
         this.context = context;
         this.listItems = listItems;
         this.adapter = adapter;
