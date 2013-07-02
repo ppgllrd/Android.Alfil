@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff000000">
+    android:background="@color/background">
 
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
@@ -27,6 +27,6 @@
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
         android:dividerHeight="1dip"
-        android:divider="#ff555555"
-        android:background="#ff151515"/>
+        android:divider="@color/drawerDivider"
+        android:background="@color/drawerCourseBackground"/>
 </android.support.v4.widget.DrawerLayout>

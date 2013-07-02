@@ -12,20 +12,20 @@ import java.util.Scanner;
 /**
  * Created by pepeg on 28/06/13.
  */
-public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, Void> {
+public class LoadStudentsListViewTask extends AsyncTask<Void, Student, Void> {
     Context context;
-    List<StudentsListItem> listItems;
+    List<Student> listItems;
     StudentsListViewAdapter adapter;
     StudentsListFragment listFragment;
-    File studentsFile;
+    Course course;
     // ProgressDialog pDialog;
 
-    public LoadStudentsListViewTask(Context context, List<StudentsListItem> listItems, StudentsListViewAdapter adapter, StudentsListFragment listFragment, File studentsFile){
+    public LoadStudentsListViewTask(Context context, Course course, List<Student> listItems, StudentsListViewAdapter adapter, StudentsListFragment listFragment){
+        this.course = course;
         this.context = context;
         this.listItems = listItems;
         this.adapter = adapter;
         this.listFragment = listFragment;
-        this.studentsFile = studentsFile;
     }
 
     @Override
@@ -44,18 +44,18 @@ public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, 
 
         int i = 1;
         try {
-            Scanner sc = new Scanner(studentsFile);
+            Scanner sc = new Scanner(new File(course.getStudentsFileName()));
             while(sc.hasNext()) {
                 String surn1 = StringUtils.uppercase(sc.nextLine());
                 String surn2 = StringUtils.uppercase(sc.nextLine());
                 String name = StringUtils.uppercase(sc.nextLine());
-                String phone1 = sc.nextLine();
-                String phone2 = sc.nextLine();
+                String phone = sc.nextLine();
+                String mobile = sc.nextLine();
                 String birthDate = sc.nextLine();
                 String mail1 = sc.nextLine();
                 String mail2 = sc.nextLine();
-                //students.add(new StudentsListItem(i, name, surn1, surn2));
-                publishProgress(new StudentsListItem(i, name, surn1, surn2));
+                //students.add(new Student(i, name, surn1, surn2));
+                publishProgress(new Student(course, i, name, surn1, surn2, phone, mobile, birthDate, mail1, mail2));
                 i++;
             }
             sc.close();
@@ -66,7 +66,7 @@ public class LoadStudentsListViewTask extends AsyncTask<Void, StudentsListItem, 
     }
 
     @Override
-    protected void onProgressUpdate(StudentsListItem... items) {
+    protected void onProgressUpdate(Student... items) {
         listItems.add(items[0]);
         if(listItems.size() % 20 == 0)
           adapter.notifyDataSetChanged();

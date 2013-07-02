@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginTop="0dip"
+              android:layout_marginBottom="5dip"
+              android:background="#ff111111"
+        >
+
+    <ImageView
+            android:id="@+id/info_photo"
+            android:layout_width="164dp"
+            android:layout_height="164dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
+            />
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
+            >
+        <TextView
+                android:id="@+id/info_surname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Surname"
+                style="@style/StudentInfoPrimary"
+                android:layout_marginBottom="0dip"
+                />
+        <TextView
+                android:id="@+id/info_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                style="@style/StudentInfoPrimary"
+                android:layout_marginTop="0dip"
+                android:layout_marginBottom="10dip"
+
+        />
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                >
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Birthdate"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"/>
+
+            <TextView
+                    android:id="@+id/info_birthdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Birthdate"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                >
+            <ImageView
+                    android:layout_width="64px"
+                    android:layout_height="64px"
+                    android:layout_gravity="left|center_vertical"
+                    android:src="@drawable/icon_phone"/>
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="10dip"
+                        >
+                <TextView
+                        android:id="@+id/info_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phone"
+                        style="@style/StudentInfoSecondary"
+                        />
+
+
+                <TextView
+                        android:id="@+id/info_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mobile"
+                        style="@style/StudentInfoSecondary"
+                        />
+            </LinearLayout>>
+        </LinearLayout>>
+
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                >
+            <ImageView
+                    android:layout_width="64px"
+                    android:layout_height="64px"
+                    android:layout_gravity="left|center_vertical"
+                    android:src="@drawable/icon_email"/>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:layout_marginLeft="10dip"
+                    >
+                <TextView
+                        android:id="@+id/info_mail1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mail1"
+                        style="@style/StudentInfoSecondary"
+                        />
+
+
+                <TextView
+                        android:id="@+id/info_mail2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mail2"
+                        style="@style/StudentInfoSecondary"
+                        />
+            </LinearLayout>>
+        </LinearLayout>>
+
+
+
+    </LinearLayout>
+</LinearLayout>

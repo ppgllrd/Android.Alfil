@@ -44,7 +44,12 @@ public class MainActivity extends Activity {
     private List<DrawerItem> drawerItems;
     private int drawerSelectedIdx = -1;
 
-    private StudentsListFragment currentFragment = null;
+    private StudentsListFragment studentsListFragment = null;
+    private StudentInfoFragment studentInfoFragment = null;
+
+    private static final String StudentsListFragmentTag = "StudentsListFragmentTag";
+    private static final String StudentInfoFragmentTag = "StudentInfoFragmentTag";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,11 @@ public class MainActivity extends Activity {
         //if (savedInstanceState == null) {
         selectItem(1,savedInstanceState); // start by selecting first course
         //}
+
+        if (savedInstanceState != null)
+            studentInfoFragment = (StudentInfoFragment) getFragmentManager().findFragmentByTag(StudentInfoFragmentTag);
+        else
+            studentInfoFragment = new StudentInfoFragment();
     }
 
     @Override
@@ -107,8 +117,8 @@ public class MainActivity extends Activity {
 
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
         menu.findItem(R.id.search_box).setVisible(!drawerOpen);
-        if(currentFragment !=null && !drawerOpen)
-            currentFragment.setOnQueryTextListener(menu);
+        if(studentsListFragment !=null && !drawerOpen)
+            studentsListFragment.setOnQueryTextListener(menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -157,30 +167,29 @@ public class MainActivity extends Activity {
         }
     }
 
-    private static final String fragmentTag = "StudentsListFragmentTag";
+
 
     private void selectItem(int position, Bundle savedInstanceState) {
         Log.d("ppgllrd", "selectItem"+position);
         boolean isSelectable = drawerItems.get(position) instanceof DrawerCourse;
 
-        if(position != drawerSelectedIdx && drawerItems.get(position) instanceof DrawerCourse) {
+        if(savedInstanceState != null || (position != drawerSelectedIdx && drawerItems.get(position) instanceof DrawerCourse)) {
             DrawerCourse drawerCourse = (DrawerCourse) drawerItems.get(position);
             drawerSelectedIdx = position;
 
 
             // update the main content by replacing fragments
             if (savedInstanceState != null) {
-                currentFragment = (StudentsListFragment) getFragmentManager().findFragmentByTag(fragmentTag);
-               // currentFragment.setStudents(drawerCourse.getCourse().getStudentsFileName(), drawerCourse.getCourse().getPhotosTemplate());
+                studentsListFragment = (StudentsListFragment) getFragmentManager().findFragmentByTag(StudentsListFragmentTag);
+               // studentsListFragment.setStudents(drawerCourse.getCourse().getStudentsFileName(), drawerCourse.getCourse().getPhotosTemplate());
             } else {
-                currentFragment = new StudentsListFragment();
+                studentsListFragment = new StudentsListFragment();
                 Bundle args = new Bundle();
                 args.putInt(StudentsListFragment.ARG_GROUP_NUMBER, position);
-                args.putString(StudentsListFragment.ARG_GROUP_STUDENTS_FILE, drawerCourse.getCourse().getStudentsFileName());
-                args.putString(StudentsListFragment.ARG_GROUP_PHOTO_TEMPLATE, drawerCourse.getCourse().getPhotosTemplate());
-                currentFragment.setArguments(args);
+                args.putParcelable(StudentsListFragment.ARG_GROUP_STUDENTS_COURSE, drawerCourse.getCourse());
+                studentsListFragment.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, currentFragment, fragmentTag).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, studentsListFragment, StudentsListFragmentTag).commit();
             }
 
             // update selected item and appTitle, then close the drawer

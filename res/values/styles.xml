@@ -10,7 +10,7 @@
     </style>
 
     <style name="DrawerCourse" parent="DrawerItem">
-        <item name="android:background">#FF151515</item>
+        <item name="android:background">@color/drawerCourseBackground</item>
         <item name="android:layout_marginBottom">2dip</item>
         <item name="android:layout_marginTop">2dip</item>
         <item name="android:layout_marginLeft">4dip</item>
@@ -19,11 +19,11 @@
 
     <style name="DrawerCourseText" parent="DrawerCourse">
         <item name="android:textSize">18.0sp</item>
-        <item name="android:textColor">#FFffffff</item>
+        <item name="android:textColor">@color/drawerCourseText</item>
     </style>
 
     <style name="DrawerSection" parent="DrawerItem">
-        <item name="android:background">#FF101010</item>
+        <item name="android:background">@color/drawerSectionBackground</item>
         <item name="android:layout_marginBottom">2dip</item>
         <item name="android:layout_marginTop">2dip</item>
         <item name="android:layout_marginLeft">10dip</item>
@@ -32,8 +32,22 @@
 
     <style name="DrawerSectionText" parent="DrawerSection">
         <item name="android:textSize">16.0sp</item>
-        <item name="android:textColor">#FF888888</item>
+        <item name="android:textColor">@color/drawerSectionText</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
+    <style name="StudentInfoPrimary">
+        <item name="android:layout_marginBottom">5dip</item>
+        <item name="android:layout_marginTop">5dip</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:layout_gravity">left</item>
+    </style>
+
+    <style name="StudentInfoSecondary">
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textColor">@color/textSecondary</item>
+    </style>
+
 
 </resources>

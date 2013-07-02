@@ -13,14 +13,14 @@ import android.widget.TextView;
 /**
  * Created by pepeg on 26/06/13.
  */
-public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
+public class StudentsListViewAdapter extends ArrayAdapter<Student> {
     Context context;
-    String formatPhoto;
+    Course course;
 
-    public StudentsListViewAdapter(Context context, int resourceId, List<StudentsListItem> items, String formatPhoto) {
+    public StudentsListViewAdapter(Context context, int resourceId, List<Student> items, Course course) {
         super(context, resourceId, items);
         this.context = context;
-        this.formatPhoto = formatPhoto;
+        this.course = course;
     }
 
     /*private view holder class*/
@@ -32,7 +32,7 @@ public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        StudentsListItem studentsListItem = getItem(position);
+        Student student = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
@@ -50,10 +50,10 @@ public class StudentsListViewAdapter extends ArrayAdapter<StudentsListItem> {
             }
         }
 
-        holder.surname.setText(studentsListItem.getSurname1() + " " + studentsListItem.getSurname2());
-        holder.name.setText(studentsListItem.getName());
+        holder.surname.setText(student.getSurname1() + " " + student.getSurname2());
+        holder.name.setText(student.getName());
 
-        String fileName = String.format(formatPhoto, studentsListItem.getPhotoId());
+        String fileName = student.getPhotoPath();
         holder.imageView.setImageDrawable(null);
         LoadPhotoTask task = new LoadPhotoTask(holder.imageView);
         task.execute(fileName);

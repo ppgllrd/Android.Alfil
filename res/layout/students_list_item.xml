@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:paddingTop="5.5dip"
+                android:paddingTop="6dip"
                 android:paddingRight="1.0dip"
-                android:paddingBottom="5.5dip">
+                android:paddingBottom="6dip">
     <ImageView
             android:id="@+id/icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:contentDescription="@string/photo"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" />
@@ -20,7 +20,7 @@
             android:layout_toRightOf="@+id/icon"
             android:paddingBottom="1dp"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="?android:textColorPrimary"
+            android:textColor="@color/textPrimary"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textSize="20dip"/>
@@ -32,7 +32,7 @@
             android:layout_below="@+id/surname"
             android:layout_toRightOf="@+id/icon"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="?android:textColorSecondary"
+            android:textColor="@color/textSecondary"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textSize="18dip"/>

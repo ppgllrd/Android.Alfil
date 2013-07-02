@@ -1,5 +1,7 @@
 package com.ppgllrd.alfil;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.io.File;
@@ -10,7 +12,7 @@ import java.util.Scanner;
 /**
  * Created by pepeg on 29/06/13.
  */
-public class Course {
+public class Course implements Parcelable {
     public static final String sdCardAlfil = "/mnt/sdcard/alfil";
 
     private static final String infoFileName = "info.txt";
@@ -39,6 +41,35 @@ public class Course {
         }
     }
 
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(folder);
+        parcel.writeString(name);
+        parcel.writeString(year);
+        parcel.writeString(description);
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    private Course(Parcel parcel) {
+        this.folder = parcel.readString();
+        this.name = parcel.readString();
+        this.year = parcel.readString();
+        this.description = parcel.readString();
+    }
+
+    public static final Parcelable.Creator<Course> CREATOR
+            = new Parcelable.Creator<Course>() {
+        public Course createFromParcel(Parcel in) {
+            return new Course(in);
+        }
+
+        public Course[] newArray(int size) {
+            return new Course[size];
+        }
+    };
+
     public String getName() {
         return name;
     }
@@ -46,7 +77,6 @@ public class Course {
     public String getFolder() {
         return folder;
     }
-
 
     public String getStudentsFileName() {
         return sdCardAlfil+"/"+folder+"/"+dataFile;
