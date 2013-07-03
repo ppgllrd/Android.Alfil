@@ -47,10 +47,6 @@ public class MainActivity extends Activity {
     private StudentsListFragment studentsListFragment = null;
     private StudentInfoFragment studentInfoFragment = null;
 
-    private static final String StudentsListFragmentTag = "StudentsListFragmentTag";
-    private static final String StudentInfoFragmentTag = "StudentInfoFragmentTag";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("ppgllrd", "ONCRE"+savedInstanceState);
@@ -87,14 +83,20 @@ public class MainActivity extends Activity {
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
+            boolean svSearchBoxVisible = false;
+
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(appTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                menu.findItem(R.id.search_box).setVisible(svSearchBoxVisible);
             }
 
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(drawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                svSearchBoxVisible = menu.findItem(R.id.search_box).isVisible();
+                menu.findItem(R.id.search_box).setVisible(false);
+
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
@@ -104,19 +106,21 @@ public class MainActivity extends Activity {
         //}
 
         if (savedInstanceState != null)
-            studentInfoFragment = (StudentInfoFragment) getFragmentManager().findFragmentByTag(StudentInfoFragmentTag);
+            studentInfoFragment = (StudentInfoFragment) getFragmentManager().findFragmentByTag(StudentInfoFragment.FragmentTag);
         else
             studentInfoFragment = new StudentInfoFragment();
     }
 
+    private Menu menu = null;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d("ppgllrd","ONCREMN");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        this.menu = menu;
 
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
-        menu.findItem(R.id.search_box).setVisible(!drawerOpen);
+        //menu.findItem(R.id.search_box).setVisible(!drawerOpen);
         if(studentsListFragment !=null && !drawerOpen)
             studentsListFragment.setOnQueryTextListener(menu);
 
@@ -180,7 +184,7 @@ public class MainActivity extends Activity {
 
             // update the main content by replacing fragments
             if (savedInstanceState != null) {
-                studentsListFragment = (StudentsListFragment) getFragmentManager().findFragmentByTag(StudentsListFragmentTag);
+                studentsListFragment = (StudentsListFragment) getFragmentManager().findFragmentByTag(StudentsListFragment.FragmentTag);
                // studentsListFragment.setStudents(drawerCourse.getCourse().getStudentsFileName(), drawerCourse.getCourse().getPhotosTemplate());
             } else {
                 studentsListFragment = new StudentsListFragment();
@@ -189,7 +193,7 @@ public class MainActivity extends Activity {
                 args.putParcelable(StudentsListFragment.ARG_GROUP_STUDENTS_COURSE, drawerCourse.getCourse());
                 studentsListFragment.setArguments(args);
                 FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, studentsListFragment, StudentsListFragmentTag).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, studentsListFragment, StudentsListFragment.FragmentTag).commit();
             }
 
             // update selected item and appTitle, then close the drawer

@@ -26,6 +26,8 @@ import java.util.List;
 public class StudentsListFragment extends ListFragment {
         public static final String ARG_GROUP_NUMBER = "group_number";
         public static final String ARG_GROUP_STUDENTS_COURSE = "group_students_course";
+        public static final String FragmentTag = "FragmentTag";
+
 
         private final List<Student> listItems;
 
@@ -134,10 +136,10 @@ public class StudentsListFragment extends ListFragment {
             // Add the fragment to the activity, pushing this transaction
             // on to the back stack.
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
+            ft.replace(R.id.content_frame, fragment, FragmentTag).addToBackStack(FragmentTag);;
             ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            ft.addToBackStack(null);
             ft.commit();
+
 
 
 
