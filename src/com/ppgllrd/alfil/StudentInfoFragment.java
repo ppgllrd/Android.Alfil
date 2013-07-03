@@ -1,11 +1,15 @@
 package com.ppgllrd.alfil;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,11 +20,19 @@ import android.widget.TextView;
  */
 public class StudentInfoFragment extends Fragment {
     public static final String ARG_STUDENT = "Student";
-    public static final String FragmentTag = "FragmentTag";
+    public static final String FragmentTag = "StudentInfoFragmentTag";
 
     private Menu menu = null; // menu in actionBar
 
+    private MainActivity mainActivity;
+
     public StudentInfoFragment() {
+    }
+
+    @Override
+    public void onAttach(Activity a) {
+        super.onAttach(a);
+        mainActivity = (MainActivity) a;
     }
 
     @Override
@@ -40,31 +52,44 @@ public class StudentInfoFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d("ppgllrd", "onCreateOptionsMenu"+menu);
+        this.menu = menu;
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onStart() {
+        Log.d("ppgllrd", "onStart");
         // fragment is being shown
         super.onStart();
         getActivity().getActionBar().setDisplayShowHomeEnabled(false);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        menu.findItem(R.id.search_box).setVisible(false);
+        mainActivity.studentInfoFragmentShown = true;
+        //menu.findItem(R.id.search_box).setVisible(false);
     }
 
     @Override
     public void onStop() {
+        Log.d("ppgllrd", "onStop");
         // fragment is becoming non-visible
         super.onStop();
         getActivity().getActionBar().setDisplayShowHomeEnabled(true);
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        mainActivity.studentInfoFragmentShown = false;
     }
 
     @Override
     public void onDestroy() {
+        Log.d("ppgllrd", "onDestroy");
         super.onDestroy();
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        this.menu = menu;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("ppgllrd", "onOptionsItemSelected:<   "+item);
+        mainActivity.showCurrentCourse();
+        return true; //return super.onOptionsItemSelected(item);
     }
 
     private void showStudent(Student student) {
