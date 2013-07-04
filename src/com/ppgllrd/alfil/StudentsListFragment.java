@@ -1,5 +1,6 @@
 package com.ppgllrd.alfil;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
@@ -30,12 +31,20 @@ public class StudentsListFragment extends ListFragment {
 
     private final List<Student> listItems;
 
-    StudentsListViewAdapter adapter;
+    private StudentsListViewAdapter adapter;
 
     private Menu menu = null; // menu in actionBar
 
+    private MainActivity mainActivity;
+
     public StudentsListFragment() {
         listItems = new ArrayList<Student>();
+    }
+
+    @Override
+    public void onAttach(Activity a) {
+        super.onAttach(a);
+        mainActivity = (MainActivity) a;
     }
 
     @Override
@@ -152,6 +161,29 @@ public class StudentsListFragment extends ListFragment {
                         break;
                     }*/
 
+
+        mainActivity.studentInfoFragment.showStudent(student);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.hide(mainActivity.studentsListFragment);
+        ft.show(mainActivity.studentInfoFragment);
+        ft.addToBackStack(StudentInfoFragment.FragmentTag);
+
+
+        /*
+                  transaction.setCustomAnimations(R.anim.slide_in_right,
+                        R.anim.slide_out_left, android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
+         */
+
+
+
+
+        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
+
+        /*
+
         Fragment fragment = new StudentInfoFragment();
         Bundle args = new Bundle();
         args.putParcelable(StudentInfoFragment.ARG_STUDENT, student);
@@ -164,9 +196,13 @@ public class StudentsListFragment extends ListFragment {
         ft.addToBackStack(StudentInfoFragment.FragmentTag);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
-
+*/
 
         // Do something with the data
+    }
+
+    public Student getStudent(int position) {
+        return adapter.getItem(position);
     }
 
 

@@ -59,24 +59,18 @@ public class StudentInfoFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        Log.d("ppgllrd", "onStart");
+    public void onResume() {
+        Log.d("ppgllrd", "onResume");
         // fragment is being shown
-        super.onStart();
-        getActivity().getActionBar().setDisplayShowHomeEnabled(false);
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        mainActivity.studentInfoFragmentShown = true;
+        super.onResume();
         //menu.findItem(R.id.search_box).setVisible(false);
     }
 
     @Override
-    public void onStop() {
-        Log.d("ppgllrd", "onStop");
+    public void onPause() {
+        Log.d("ppgllrd", "onPause");
         // fragment is becoming non-visible
-        super.onStop();
-        getActivity().getActionBar().setDisplayShowHomeEnabled(true);
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        mainActivity.studentInfoFragmentShown = false;
+        super.onPause();
     }
 
     @Override
@@ -86,13 +80,29 @@ public class StudentInfoFragment extends Fragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d("ppgllrd", "setUserVisibleHint "+hidden);
+        if (!hidden) {
+            getActivity().getActionBar().setDisplayShowHomeEnabled(false);
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            mainActivity.studentInfoFragmentShown = true;
+        }
+        else {
+            getActivity().getActionBar().setDisplayShowHomeEnabled(true);
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            mainActivity.studentInfoFragmentShown = false;
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("ppgllrd", "onOptionsItemSelected:<   "+item);
         mainActivity.showCurrentCourse();
         return true; //return super.onOptionsItemSelected(item);
     }
 
-    private void showStudent(Student student) {
+    public void showStudent(Student student) {
         View view = getView();
         ImageView photo = (ImageView) view.findViewById(R.id.info_photo);
         String path = student.getPhotoPath();

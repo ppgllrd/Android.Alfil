@@ -37,6 +37,10 @@ public class Student implements Parcelable {
         this.mail2 = mail2;
     }
 
+    public Student(Course course) {
+        this(course,0,"","","","","","","","");
+    }
+
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeParcelable(course, flags);
         parcel.writeInt(photoId);

@@ -18,8 +18,11 @@
 
 package com.ppgllrd.alfil;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -43,7 +46,9 @@ public class MainActivity extends Activity {
     private List<DrawerItem> drawerItems;
     private int drawerSelectedIdx = -1;
 
-    private StudentsListFragment studentsListFragment = null;
+    public StudentsListFragment studentsListFragment = null;
+    public StudentInfoFragment studentInfoFragment = null;
+
 
     private Menu menu = null; // menu in actionBar
 
@@ -53,6 +58,7 @@ public class MainActivity extends Activity {
         private Activity activity;
         private DrawerLayout drawerLayout;
         private boolean svSearchBoxVisible = false;
+        private int svDisplayOptions = 0;
         private CharSequence svTitle = "";
         private String appTitle;
 
@@ -78,6 +84,9 @@ public class MainActivity extends Activity {
         public void onDrawerOpened(View drawerView) {
             svTitle = activity.getActionBar().getTitle();
             activity.getActionBar().setTitle(appTitle);
+
+            svDisplayOptions = activity.getActionBar().getDisplayOptions();
+            activity.getActionBar().setDisplayShowHomeEnabled(true);
             MenuItem search = menu.findItem(R.id.search_box);
 
             if(search != null) {
@@ -87,10 +96,12 @@ public class MainActivity extends Activity {
         }
 
         public void onDrawerClosed(View view) {
+            Log.d("ppgllrd","onDrawerClosed");
             getActionBar().setTitle(svTitle);
             MenuItem search = menu.findItem(R.id.search_box);
             if(search != null)
                 search.setVisible(svSearchBoxVisible);
+            getActionBar().setDisplayOptions(svDisplayOptions);
         }
     }
 
@@ -99,7 +110,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("ppgllrd", "onCreate: "+savedInstanceState);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.main_double);
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView drawerList = (ListView) findViewById(R.id.drawer_list);
@@ -177,12 +188,40 @@ public class MainActivity extends Activity {
 //        selectCourse(1, savedInstanceState); // start by selecting first course
 
 
-        // update the main content by replacing fragments
-        if (savedInstanceState == null) {
-            selectCourse(1); // start by selecting first course
+        FragmentManager fragMgr = getFragmentManager();
+        FragmentTransaction xact = fragMgr.beginTransaction();
+
+        drawerSelectedIdx = 2; // start by selecting first course
+        if(fragMgr.findFragmentByTag(StudentsListFragment.FragmentTag)==null) {
+            DrawerCourse drawerCourse = (DrawerCourse) drawerItems.get(drawerSelectedIdx);
+            studentsListFragment = new StudentsListFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(StudentsListFragment.ARG_GROUP_STUDENTS_COURSE, drawerCourse.getCourse());
+            studentsListFragment.setArguments(args);
+
+            xact.add(R.id.list_Fragment_Placeholder, studentsListFragment, StudentsListFragment.FragmentTag).
+                        commit();
         } else {
             studentsListFragment = (StudentsListFragment) getFragmentManager().findFragmentByTag(StudentsListFragment.FragmentTag);
         }
+
+        xact = fragMgr.beginTransaction();
+        if(fragMgr.findFragmentByTag(StudentInfoFragment.FragmentTag)==null) {
+            studentInfoFragment = new StudentInfoFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(StudentInfoFragment.ARG_STUDENT, new Student(((DrawerCourse) drawerItems.get(drawerSelectedIdx)).getCourse()));
+            studentInfoFragment.setArguments(args);
+
+            xact.add(R.id.info_Fragment_Placeholder, studentInfoFragment, StudentInfoFragment.FragmentTag).
+                    commit();
+        } else {
+            studentInfoFragment = (StudentInfoFragment) getFragmentManager().findFragmentByTag(StudentInfoFragment.FragmentTag);
+        }
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.hide(studentInfoFragment);
+        ft.show(studentsListFragment);
+        ft.commit();
+
     }
 
     @Override
@@ -244,8 +283,6 @@ public class MainActivity extends Activity {
             FragmentManager fragmentManager = getFragmentManager();
             Log.d("ppgllrd", "Count:"+fragmentManager.getBackStackEntryCount());
 
-            if(studentInfoFragmentShown)
-                fragmentManager.popBackStack();
 
             if (position != drawerSelectedIdx) {
                 Log.d("ppgllrd", "YES");
@@ -255,6 +292,28 @@ public class MainActivity extends Activity {
                 Bundle args = new Bundle();
                 args.putParcelable(StudentsListFragment.ARG_GROUP_STUDENTS_COURSE, drawerCourse.getCourse());
                 studentsListFragment.setArguments(args);
+
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.list_Fragment_Placeholder, studentsListFragment, StudentsListFragment.FragmentTag);
+                ft.addToBackStack(StudentInfoFragment.FragmentTag);
+                ft.commit();
+
+
+        /*
+                  transaction.setCustomAnimations(R.anim.slide_in_right,
+                        R.anim.slide_out_left, android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right);
+         */
+
+
+
+
+                //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+
+
+      /*
 
                 if(fragmentManager.getBackStackEntryCount()==0)
                     fragmentManager.beginTransaction().
@@ -266,11 +325,20 @@ public class MainActivity extends Activity {
                         replace(R.id.content_frame, studentsListFragment, StudentsListFragment.FragmentTag).
                         // addToBackStack(StudentsListFragment.FragmentTag).
                         commit();
+    */
             }
             Log.d("ppgllrd", "YYY");
 
             actionBarTitleController.closeDrawer();
             actionBarTitleController.setTitle(drawerCourse.getCourse().getName());
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.hide(studentInfoFragment);
+            ft.show(studentsListFragment);
+            ft.addToBackStack(StudentInfoFragment.FragmentTag);
+            ft.commit();
+
+
 
         }
         Log.d("ppgllrd", "ZZZ");
