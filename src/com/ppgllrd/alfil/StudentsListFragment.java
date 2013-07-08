@@ -154,9 +154,9 @@ public class StudentsListFragment extends ListFragment {
         Student student = adapter.getItem(position);
 
                     /*
-            int ident = student.getIdentity();
+            int ident = student.getPhoto();
             for(Student st : listItems)
-                    if(st.getIdentity() == ident) {
+                    if(st.getPhoto() == ident) {
                         student = st;
                         break;
                     }*/

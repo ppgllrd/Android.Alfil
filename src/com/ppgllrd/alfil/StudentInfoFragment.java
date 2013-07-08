@@ -129,6 +129,15 @@ public class StudentInfoFragment extends Fragment {
         TextView birthdate = (TextView) view.findViewById(R.id.info_birthdate);
         birthdate.setText(student.getBirthdate());
 
+        TextView dni = (TextView) view.findViewById(R.id.info_dni);
+        dni.setText(student.getDNI());
+
+        TextView enrollments = (TextView) view.findViewById(R.id.info_enrollments);
+        enrollments.setText(Integer.toString(student.getEnrollments()));
+
+        TextView failures = (TextView) view.findViewById(R.id.info_failures);
+        failures.setText(Integer.toString(student.getFailures()));
+
         // show name on navigation bar
         getActivity().getActionBar().setTitle(student.getName());
     }

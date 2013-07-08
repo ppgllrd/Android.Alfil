@@ -17,9 +17,9 @@ public class Course implements Parcelable {
 
     private static final String infoFileName = "info.txt";
 
-    private static final String photoTemplate = "image_%03d.jpg";
+    private static final String dataFile = "students.txt";
 
-    private static final String dataFile = "alumnos.txt";
+    private static final String imgFolder = "images";
 
     private String folder;
     private String name;
@@ -82,8 +82,8 @@ public class Course implements Parcelable {
         return sdCardAlfil+"/"+folder+"/"+dataFile;
     }
 
-    public String getPhotosTemplate() {
-        return sdCardAlfil+"/"+folder+"/"+photoTemplate;
+    public String getPhotoFullPath(String photo) {
+        return sdCardAlfil+"/"+folder+"/"+imgFolder+"/"+photo;
     }
 
     public static Course[] getCourses() {

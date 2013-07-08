@@ -34,4 +34,7 @@
     <string name="menu_search">Search</string>
     <string name="Birthdate">"Birthdate: "</string>
     <string name="Courses">Courses</string>
+    <string name="DNI">"DNI: "</string>
+    <string name="enrollments">"Matriculaciones: "</string>
+    <string name="failures">"Convocatorias agotadas: "</string>
 </resources>

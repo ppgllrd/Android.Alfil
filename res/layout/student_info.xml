@@ -45,6 +45,22 @@
 
         />
 
+
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+                    android:id="@+id/scrollView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:fillViewport="true" >
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginBottom="5dip"
+                    >
+
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
@@ -64,6 +80,79 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Birthdate"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"
+                    />
+        </LinearLayout>
+
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                >
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/DNI"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"/>
+
+            <TextView
+                    android:id="@+id/info_dni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DNI"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                >
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enrollments"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"/>
+
+            <TextView
+                    android:id="@+id/info_enrollments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="enrollments"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                >
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/failures"
+                    style="@style/StudentInfoSecondary"
+                    android:layout_gravity="left|bottom"/>
+
+            <TextView
+                    android:id="@+id/info_failures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="failures"
                     style="@style/StudentInfoSecondary"
                     android:layout_gravity="left|bottom"
                     />
@@ -150,7 +239,8 @@
             </LinearLayout>>
         </LinearLayout>>
 
-
+            </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

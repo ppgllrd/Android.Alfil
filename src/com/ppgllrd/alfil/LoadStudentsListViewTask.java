@@ -54,8 +54,13 @@ public class LoadStudentsListViewTask extends AsyncTask<Void, Student, Void> {
                 String birthDate = sc.nextLine();
                 String mail1 = sc.nextLine();
                 String mail2 = sc.nextLine();
+                String photo = sc.nextLine();
+                String dni = sc.nextLine();
+                String expedient = sc.nextLine();
+                int enrollments = Integer.parseInt(sc.nextLine());
+                int failures = Integer.parseInt(sc.nextLine());
                 //students.add(new Student(i, name, surn1, surn2));
-                publishProgress(new Student(course, i, name, surn1, surn2, phone, mobile, birthDate, mail1, mail2));
+                publishProgress(new Student(course, name, surn1, surn2, phone, mobile, birthDate, mail1, mail2, photo, dni, expedient, enrollments, failures));
                 i++;
             }
             sc.close();

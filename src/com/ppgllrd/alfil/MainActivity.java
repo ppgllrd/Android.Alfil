@@ -191,7 +191,7 @@ public class MainActivity extends Activity {
         FragmentManager fragMgr = getFragmentManager();
         FragmentTransaction xact = fragMgr.beginTransaction();
 
-        drawerSelectedIdx = 2; // start by selecting first course
+        drawerSelectedIdx = 1; // start by selecting first course
         if(fragMgr.findFragmentByTag(StudentsListFragment.FragmentTag)==null) {
             DrawerCourse drawerCourse = (DrawerCourse) drawerItems.get(drawerSelectedIdx);
             studentsListFragment = new StudentsListFragment();
