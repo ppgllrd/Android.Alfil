@@ -32,9 +32,13 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="photo">Photo</string>
     <string name="menu_search">Search</string>
-    <string name="Birthdate">"Birthdate: "</string>
+    <string name="phone">"Teléfono"</string>
+    <string name="mobile">"Móvil"</string>
+    <string name="birthdate">"Cumpleaños"</string>
     <string name="Courses">Courses</string>
-    <string name="DNI">"DNI: "</string>
-    <string name="enrollments">"Matriculaciones: "</string>
-    <string name="failures">"Convocatorias agotadas: "</string>
+    <string name="DNI">"DNI"</string>
+    <string name="enrollments">"Matriculaciones"</string>
+    <string name="failures">"Convocatorias agotadas"</string>
+    <string name="mail1">"Correo personal"</string>
+    <string name="mail2">"Correo UMA"</string>
 </resources>

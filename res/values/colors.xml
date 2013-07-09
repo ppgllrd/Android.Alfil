@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="textPrimary">#ffeeeeee</color>
-    <color name="textSecondary">#ffaaaaaa</color>
+    <color name="textPrimary">#ffffffff</color>
+    <color name="textSecondary">#ffeeeeee</color>
+    <color name="textTertiary">#ffaaaaaa</color>
 
     <color name="background">#ff151515</color>
     <color name="drawerDivider">#ff444444</color>

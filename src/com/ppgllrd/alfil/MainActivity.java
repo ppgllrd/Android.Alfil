@@ -115,10 +115,17 @@ public class MainActivity extends Activity {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ListView drawerList = (ListView) findViewById(R.id.drawer_list);
 
+
+        Course[] courses = Course.getCourses();
+        String currentYear = "";
         drawerItems = new ArrayList<DrawerItem>();
-        drawerItems.add(new DrawerSection(getResources().getString(R.string.Courses)));
-        for(Course course : Course.getCourses())
+        for(Course course : courses) {
+            if(course.getYear().compareTo(currentYear) != 0) {
+                currentYear = course.getYear();
+                drawerItems.add(new DrawerSection(currentYear));
+            }
             drawerItems.add(new DrawerCourse(course));
+        }
 
 
         // set up the drawer's list view with items and click listener

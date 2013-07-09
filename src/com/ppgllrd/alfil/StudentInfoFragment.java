@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 /**
@@ -137,6 +138,9 @@ public class StudentInfoFragment extends Fragment {
 
         TextView failures = (TextView) view.findViewById(R.id.info_failures);
         failures.setText(Integer.toString(student.getFailures()));
+
+        ScrollView scrollView = (ScrollView) view.findViewById(R.id.info_scrollView);
+        scrollView.fullScroll(ScrollView.FOCUS_UP);
 
         // show name on navigation bar
         getActivity().getActionBar().setTitle(student.getName());

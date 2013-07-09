@@ -42,12 +42,21 @@
         <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
         <item name="android:textColor">@color/textPrimary</item>
         <item name="android:layout_gravity">left</item>
+        <item name="android:textSize">22.0sp</item>
     </style>
 
-    <style name="StudentInfoSecondary">
-        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    <style name="StudentInfoSecondary" >
         <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:layout_marginBottom">2dip</item>
+        <item name="android:layout_marginTop">0dip</item>
     </style>
 
+    <style name="StudentInfoTertiary"  >
+        <item name="android:textColor">@color/textTertiary</item>
+        <item name="android:textSize">16.0sp</item>
+        <item name="android:layout_marginBottom">0dip</item>
+        <item name="android:layout_marginTop">0dip</item>
+    </style>
 
 </resources>

@@ -78,6 +78,10 @@ public class Course implements Parcelable {
         return folder;
     }
 
+    public String getYear() {
+        return year;
+    }
+
     public String getStudentsFileName() {
         return sdCardAlfil+"/"+folder+"/"+dataFile;
     }
@@ -105,7 +109,10 @@ public class Course implements Parcelable {
         Arrays.sort(courses, new Comparator<Course>() {
             @Override
             public int compare(Course course1, Course course2) {
-                return course1.name.compareTo(course2.name);
+                int cmp = course1.year.compareTo(course2.year);
+                if(cmp == 0)
+                    cmp = course1.name.compareTo(course2.name);
+                return cmp;
             }
         });
 

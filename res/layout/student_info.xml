@@ -6,8 +6,20 @@
               android:layout_height="match_parent"
               android:layout_marginTop="0dip"
               android:layout_marginBottom="5dip"
-              android:background="#ff111111"
+
         >
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="0dip"
+            android:background="@color/drawerCourseBackground"
+            >
+
+
 
     <ImageView
             android:id="@+id/info_photo"
@@ -18,23 +30,19 @@
             android:layout_marginBottom="5dip"
             />
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="left|top"
-            android:layout_marginLeft="20dip"
-            android:layout_marginRight="20dip"
-            >
-        <TextView
+
+    <TextView
                 android:id="@+id/info_surname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Surname"
                 style="@style/StudentInfoPrimary"
                 android:layout_marginBottom="0dip"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
                 />
-        <TextView
+
+    <TextView
                 android:id="@+id/info_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,206 +50,360 @@
                 style="@style/StudentInfoPrimary"
                 android:layout_marginTop="0dip"
                 android:layout_marginBottom="10dip"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                />
 
-        />
+
+     </LinearLayout>
+
+    <ImageView
+                android:background="@drawable/divider_horizontal_dark_opaque"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
 
 
 
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-
-                    android:id="@+id/scrollView"
+                    android:id="@+id/info_scrollView"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:fillViewport="true" >
+                    android:fillViewport="true">
+
+
+
             <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dip"
-                    android:layout_marginBottom="5dip"
+                    android:layout_marginTop="0dip"
+                    android:layout_marginBottom="0dip"
                     >
 
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="5dip"
-                >
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/Birthdate"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"/>
 
-            <TextView
-                    android:id="@+id/info_birthdate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Birthdate"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"
-                    />
-        </LinearLayout>
-
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="5dip"
-                >
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/DNI"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"/>
-
-            <TextView
-                    android:id="@+id/info_dni"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DNI"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"
-                    />
-        </LinearLayout>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="5dip"
-                >
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/enrollments"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"/>
-
-            <TextView
-                    android:id="@+id/info_enrollments"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="enrollments"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"
-                    />
-        </LinearLayout>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="5dip"
-                >
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/failures"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"/>
-
-            <TextView
-                    android:id="@+id/info_failures"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="failures"
-                    style="@style/StudentInfoSecondary"
-                    android:layout_gravity="left|bottom"
-                    />
-        </LinearLayout>
-
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="5dip"
-                >
-            <ImageView
-                    android:layout_width="64px"
-                    android:layout_height="64px"
-                    android:layout_gravity="left|center_vertical"
-                    android:src="@drawable/icon_phone"/>
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
 
                 <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="wrap_content"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="left|center"
-                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
                         >
-                <TextView
-                        android:id="@+id/info_phone"
-                        android:layout_width="wrap_content"
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/DNI"
+                            style="@style/StudentInfoSecondary"
+                            android:layout_gravity="left|bottom"/>
+
+                    <TextView
+                            android:id="@+id/info_dni"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="DNI"
+                            style="@style/StudentInfoTertiary"
+                            android:layout_gravity="left|bottom"
+                            />
+                </LinearLayout>
+
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Phone"
-                        style="@style/StudentInfoSecondary"
-                        />
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        >
 
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/birthdate"
+                            style="@style/StudentInfoSecondary"
+                            android:layout_gravity="left|bottom"/>
 
-                <TextView
-                        android:id="@+id/info_mobile"
-                        android:layout_width="wrap_content"
+                    <TextView
+                            android:id="@+id/info_birthdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Birthdate"
+                            style="@style/StudentInfoTertiary"
+                            android:layout_gravity="left|bottom"
+                            />
+
+                </LinearLayout>
+
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mobile"
-                        style="@style/StudentInfoSecondary"
-                        />
-            </LinearLayout>>
-        </LinearLayout>>
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        >
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/enrollments"
+                            style="@style/StudentInfoSecondary"
+                            android:layout_gravity="left|bottom"/>
+
+                    <TextView
+                            android:id="@+id/info_enrollments"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="enrollments"
+                            style="@style/StudentInfoTertiary"
+                            android:layout_gravity="left|bottom"
+                            />
+                </LinearLayout>
+
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
 
 
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="5dip"
-                >
-            <ImageView
-                    android:layout_width="64px"
-                    android:layout_height="64px"
-                    android:layout_gravity="left|center_vertical"
-                    android:src="@drawable/icon_email"/>
-
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
-                    android:layout_marginLeft="10dip"
-                    >
-                <TextView
-                        android:id="@+id/info_mail1"
-                        android:layout_width="wrap_content"
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mail1"
-                        style="@style/StudentInfoSecondary"
-                        />
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        >
 
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/failures"
+                            style="@style/StudentInfoSecondary"
+                            android:layout_gravity="left|bottom"/>
 
-                <TextView
-                        android:id="@+id/info_mail2"
-                        android:layout_width="wrap_content"
+                    <TextView
+                            android:id="@+id/info_failures"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="failures"
+                            style="@style/StudentInfoTertiary"
+                            android:layout_gravity="left|bottom"
+                            />
+                </LinearLayout>
+
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mail2"
-                        style="@style/StudentInfoSecondary"
-                        />
-            </LinearLayout>>
-        </LinearLayout>>
+                        android:layout_gravity="left|top"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        >
+
+                    <ImageView
+                            android:layout_width="64px"
+                            android:layout_height="64px"
+                            android:layout_gravity="left|center_vertical"
+                            android:src="@drawable/icon_email"/>
+
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginLeft="10dip"
+                            >
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/mail1"
+                                style="@style/StudentInfoSecondary"
+                                />
+
+                        <TextView
+                                android:id="@+id/info_mail1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mail1"
+                                style="@style/StudentInfoTertiary"
+                                />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        >
+
+                    <ImageView
+                            android:layout_width="64px"
+                            android:layout_height="64px"
+                            android:layout_gravity="left|center_vertical"
+                            android:src="@drawable/icon_email"/>
+
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginLeft="10dip"
+                            >
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/mail2"
+                                style="@style/StudentInfoSecondary"
+                                />
+
+                        <TextView
+                                android:id="@+id/info_mail2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mail2"
+                                style="@style/StudentInfoTertiary"
+                                />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        >
+
+                    <ImageView
+                            android:layout_width="64px"
+                            android:layout_height="64px"
+                            android:layout_gravity="left|center_vertical"
+                            android:src="@drawable/icon_phone"/>
+
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginLeft="10dip"
+                            >
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/phone"
+                                style="@style/StudentInfoSecondary"
+                                />
+
+                        <TextView
+                                android:id="@+id/info_phone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Phone"
+                                style="@style/StudentInfoTertiary"
+                                />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ImageView
+                        android:background="@drawable/divider_horizontal_dark_opaque"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"/>
+
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="5dip"
+                        android:layout_marginRight="5dip"
+                        >
+
+                    <ImageView
+                            android:layout_width="64px"
+                            android:layout_height="64px"
+                            android:layout_gravity="left|center_vertical"
+                            android:src="@drawable/icon_phone"/>
+
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|center"
+                            android:layout_marginLeft="10dip"
+                            >
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/mobile"
+                                style="@style/StudentInfoSecondary"
+                                />
+
+                        <TextView
+                                android:id="@+id/info_mobile"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mobile"
+                                style="@style/StudentInfoTertiary"
+                                />
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
 
-    </LinearLayout>
 
 </LinearLayout>
