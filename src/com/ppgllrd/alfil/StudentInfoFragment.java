@@ -99,9 +99,19 @@ public class StudentInfoFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("ppgllrd", "onOptionsItemSelected:<   "+item);
-        mainActivity.showCurrentCourse();
-        return true; //return super.onOptionsItemSelected(item);
+        //mainActivity.showCurrentCourse();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // < menu in action bar clicked;
+                FragmentManager fm= getActivity().getFragmentManager();
+                if(fm.getBackStackEntryCount()>0){
+                    fm.popBackStack();
+                }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
+
 
     public void showStudent(Student student) {
         View view = getView();

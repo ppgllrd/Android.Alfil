@@ -164,7 +164,11 @@ public class StudentsListFragment extends ListFragment {
 
         mainActivity.studentInfoFragment.showStudent(student);
 
+
+
+
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        //ft.addToBackStack(null);
         ft.hide(mainActivity.studentsListFragment);
         ft.show(mainActivity.studentInfoFragment);
         ft.addToBackStack(StudentInfoFragment.FragmentTag);

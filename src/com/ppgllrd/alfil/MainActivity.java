@@ -195,38 +195,40 @@ public class MainActivity extends Activity {
 //        selectCourse(1, savedInstanceState); // start by selecting first course
 
 
-        FragmentManager fragMgr = getFragmentManager();
-        FragmentTransaction xact = fragMgr.beginTransaction();
+        FragmentManager fm = getFragmentManager();
 
         drawerSelectedIdx = 1; // start by selecting first course
-        if(fragMgr.findFragmentByTag(StudentsListFragment.FragmentTag)==null) {
+        if(fm.findFragmentByTag(StudentsListFragment.FragmentTag)==null) {
             DrawerCourse drawerCourse = (DrawerCourse) drawerItems.get(drawerSelectedIdx);
             studentsListFragment = new StudentsListFragment();
             Bundle args = new Bundle();
             args.putParcelable(StudentsListFragment.ARG_GROUP_STUDENTS_COURSE, drawerCourse.getCourse());
             studentsListFragment.setArguments(args);
 
-            xact.add(R.id.list_Fragment_Placeholder, studentsListFragment, StudentsListFragment.FragmentTag).
-                        commit();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.list_Fragment_Placeholder, studentsListFragment, StudentsListFragment.FragmentTag);
+            ft.commit();
         } else {
             studentsListFragment = (StudentsListFragment) getFragmentManager().findFragmentByTag(StudentsListFragment.FragmentTag);
         }
 
-        xact = fragMgr.beginTransaction();
-        if(fragMgr.findFragmentByTag(StudentInfoFragment.FragmentTag)==null) {
+        if(fm.findFragmentByTag(StudentInfoFragment.FragmentTag)==null) {
             studentInfoFragment = new StudentInfoFragment();
             Bundle args = new Bundle();
             args.putParcelable(StudentInfoFragment.ARG_STUDENT, new Student(((DrawerCourse) drawerItems.get(drawerSelectedIdx)).getCourse()));
             studentInfoFragment.setArguments(args);
 
-            xact.add(R.id.info_Fragment_Placeholder, studentInfoFragment, StudentInfoFragment.FragmentTag).
-                    commit();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.info_Fragment_Placeholder, studentInfoFragment, StudentInfoFragment.FragmentTag);
+            ft.commit();
         } else {
             studentInfoFragment = (StudentInfoFragment) getFragmentManager().findFragmentByTag(StudentInfoFragment.FragmentTag);
         }
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+        FragmentTransaction ft = fm.beginTransaction();
         ft.hide(studentInfoFragment);
         ft.show(studentsListFragment);
+        //ft.addToBackStack(null);
         ft.commit();
 
     }
@@ -303,7 +305,7 @@ public class MainActivity extends Activity {
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.list_Fragment_Placeholder, studentsListFragment, StudentsListFragment.FragmentTag);
-                ft.addToBackStack(StudentInfoFragment.FragmentTag);
+                //ft.addToBackStack(StudentInfoFragment.FragmentTag);
                 ft.commit();
 
 
@@ -342,7 +344,7 @@ public class MainActivity extends Activity {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.hide(studentInfoFragment);
             ft.show(studentsListFragment);
-            ft.addToBackStack(StudentInfoFragment.FragmentTag);
+           // ft.addToBackStack(StudentInfoFragment.FragmentTag);
             ft.commit();
 
 
