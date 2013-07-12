@@ -81,15 +81,9 @@ public class StudentsListFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        /*
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search_box).getActionView();
-        String query = "";
-        if (searchView != null) {
-            query =searchView.getQuery().toString();
-        }
-*/
-
-
+        // studentInfoFragment has priority
+        if(mainActivity.studentInfoFragment.isShown())
+            return;
 
         Log.d("ppgllrd", "onCreateOptionsMenuSLF" + menu+ " " + query);
         super.onCreateOptionsMenu(menu, inflater);
@@ -101,14 +95,6 @@ public class StudentsListFragment extends ListFragment {
 
         mainActivity.getActionBarTitleController().setDrawerIndicatorEnabled(true); // enable drawer indicator
 
-        /*
-
-        if(!query.isEmpty()) {
-            SearchView searchView = (SearchView) menu.findItem(R.id.search_box).getActionView();
-            searchView.setQuery(query, false);
-        }
-
-*/
         setOnQueryTextListener(menu);
     }
 
@@ -212,25 +198,14 @@ public class StudentsListFragment extends ListFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         Log.d("ppgllrd", "setUserVisibleHint> "+hidden);
-        /*
-        if (!hidden) {
-            getActivity().getActionBar().setDisplayShowHomeEnabled(false);
-            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        }*/
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        //Student student = listItems.get(position);
         Student student = adapter.getItem(position);
         mainActivity.studentInfoFragment.showStudent(student);
 
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        //ft.addToBackStack(null);
-
-
-        //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
 
         ft.setCustomAnimations(R.anim.slide_in_right,
                 R.anim.none, R.anim.none,
@@ -240,33 +215,9 @@ public class StudentsListFragment extends ListFragment {
         ft.hide(mainActivity.studentsListFragment);
         ft.addToBackStack(StudentInfoFragment.FragmentTag);
 
-
-
-
-
-
-
-
-        //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.commit();
+        getFragmentManager().executePendingTransactions();
 
-        /*
-
-        Fragment fragment = new StudentInfoFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(StudentInfoFragment.ARG_STUDENT, student);
-        fragment.setArguments(args);
-
-        // Add the fragment to the activity, pushing this transaction
-        // on to the back stack.
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, fragment, StudentInfoFragment.FragmentTag);
-        ft.addToBackStack(StudentInfoFragment.FragmentTag);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.commit();
-*/
-
-        // Do something with the data
     }
 
     public Student getStudent(int position) {

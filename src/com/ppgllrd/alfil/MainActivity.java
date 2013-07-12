@@ -51,7 +51,6 @@ public class MainActivity extends Activity {
     public StudentsListFragment studentsListFragment = null;
     public StudentInfoFragment studentInfoFragment = null;
 
-
     private Menu menu = null; // menu in actionBar
 
     class ActionBarTitleController extends ActionBarDrawerToggle {
@@ -84,7 +83,6 @@ public class MainActivity extends Activity {
                 if(search != null)
                     search.setVisible(false);
             }
-
         }
 
         public void onDrawerClosed(View view) {
@@ -191,7 +189,7 @@ public class MainActivity extends Activity {
         // ActionBarDrawerToggle will take care of this.
         Log.d("ppgllrd", "onOptionsItemSelected: "+item);
 
-        if (studentInfoFragment.isVisible())
+        if (studentInfoFragment.isShown())
             return false; //don't open drawer
 
         if (actionBarTitleController.onOptionsItemSelected(item)) {
@@ -238,15 +236,15 @@ public class MainActivity extends Activity {
 
             actionBarTitleController.closeDrawer();
 
-            if(studentInfoFragment.isVisible()) {
+            if(studentInfoFragment.isShown()) {
                 FragmentManager fm = getFragmentManager();
                 if(fm.getBackStackEntryCount()>0){
                     fm.popBackStack();
                 }
             }
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.hide(studentInfoFragment);
             ft.show(studentsListFragment);
+            ft.hide(studentInfoFragment);
            // ft.addToBackStack(StudentInfoFragment.FragmentTag);
             ft.commit();
 

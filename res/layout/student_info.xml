@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/info_layout"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -217,6 +218,7 @@
                         android:layout_height="wrap_content"/>
 
                 <LinearLayout
+                        android:id="@+id/info_mail1_frame"
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -264,6 +266,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"/>
                 <LinearLayout
+                        android:id="@+id/info_mail2_frame"
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -310,7 +313,9 @@
                         android:background="@drawable/divider_horizontal_dark_opaque"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"/>
+
                 <LinearLayout
+                        android:id="@+id/info_phone_frame"
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -360,6 +365,7 @@
 
 
                 <LinearLayout
+                        android:id="@+id/info_mobile_frame"
                         android:orientation="horizontal"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"

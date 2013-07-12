@@ -41,4 +41,5 @@
     <string name="failures">"Convocatorias agotadas"</string>
     <string name="mail1">"Correo personal"</string>
     <string name="mail2">"Correo UMA"</string>
+    <string name="sendMail">"Enviar Correo ..."</string>
 </resources>
