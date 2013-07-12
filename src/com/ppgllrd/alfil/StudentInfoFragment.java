@@ -1,5 +1,6 @@
 package com.ppgllrd.alfil;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -10,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -19,15 +22,86 @@ import android.widget.TextView;
 /**
  * Created by pepeg on 2/07/13.
  */
-public class StudentInfoFragment extends Fragment {
+public class StudentInfoFragment extends Fragment implements View.OnTouchListener {
     public static final String ARG_STUDENT = "Student";
     public static final String FragmentTag = "StudentInfoFragmentTag";
 
-    private Menu menu = null; // menu in actionBar
-
     private MainActivity mainActivity;
 
+    private Student currentStudent = null;
+
     public StudentInfoFragment() {
+    }
+
+    private static final int MIN_DISTANCE = 75;
+    private float downX, downY, upX, upY;
+    private boolean fired = false;
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        Log.d("ppgllrd", "onTouch"+v);
+        if(this.isVisible()){
+        Log.d("ppgllrd", "onTouch"+v);
+        switch(event.getAction()){
+            case MotionEvent.ACTION_DOWN: {
+                downX = event.getX();
+                downY = event.getY();
+                fired = false;
+                return true;
+            }
+            case MotionEvent.ACTION_MOVE: {
+                upX = event.getX();
+                float deltaX = downX - upX;
+                if(Math.abs(deltaX) > MIN_DISTANCE){
+                    // left or right
+                    //if(deltaX > 0) { this.onRighToLefttSwipe(); return true; }
+                    if(deltaX < 0) {
+                        fired = true;
+                        FragmentManager fm = getActivity().getFragmentManager();
+                        if(fm.getBackStackEntryCount()>0){
+                            fm.popBackStack();
+                        }
+                        return true;
+                    }
+                }
+                else {
+                    //Log.i(logTag, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + MIN_DISTANCE);
+                    return false; // We don't consume the event
+                }
+
+            }
+            /*
+            case MotionEvent.ACTION_UP: {
+                upX = event.getX();
+                upY = event.getY();
+
+                float deltaX = downX - upX;
+                float deltaY = downY - upY;
+
+                // swipe horizontal?
+                if(Math.abs(deltaX) > MIN_DISTANCE){
+                    // left or right
+                    //if(deltaX > 0) { this.onRighToLefttSwipe(); return true; }
+                    if(deltaX < 0) {
+                        FragmentManager fm = getActivity().getFragmentManager();
+                        if(fm.getBackStackEntryCount()>0){
+                            fm.popBackStack();
+                        }
+                        return true;
+                    }
+                }
+                else {
+                    //Log.i(logTag, "Swipe was only " + Math.abs(deltaX) + " long, need at least " + MIN_DISTANCE);
+                    return false; // We don't consume the event
+                }
+
+
+                return true;
+            }
+*/
+        }
+        }
+        return false;
     }
 
     @Override
@@ -40,6 +114,7 @@ public class StudentInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.student_info, null);
+        rootView.bringToFront();
         return rootView;
     }
 
@@ -50,14 +125,23 @@ public class StudentInfoFragment extends Fragment {
         Student student = bundle.getParcelable(ARG_STUDENT);
         showStudent(student);
         setHasOptionsMenu(true); // to grab actionBar's menu in onCreateOptionsMenu
+
+        FrameLayout frameLayout = (FrameLayout) getActivity().findViewById(R.id.info_Fragment_Placeholder);
+        frameLayout.setOnTouchListener(this);
+
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Log.d("ppgllrd", "onCreateOptionsMenu"+menu);
-        this.menu = menu;
+        Log.d("ppgllrd", "onCreateOptionsMenuSIF" + menu);
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+        if(currentStudent != null)
+            mainActivity.getActionBar().setTitle(currentStudent.getName()+" "+currentStudent.getSurname1()+" "+currentStudent.getSurname2());
+        mainActivity.getActionBarTitleController().setDrawerIndicatorEnabled(false); //show back arrow <
     }
+
 
     @Override
     public void onResume() {
@@ -84,29 +168,21 @@ public class StudentInfoFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         Log.d("ppgllrd", "setUserVisibleHint "+hidden);
-        if (!hidden) {
-            getActivity().getActionBar().setDisplayShowHomeEnabled(false);
-            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-            mainActivity.studentInfoFragmentShown = true;
-        }
-        else {
-            getActivity().getActionBar().setDisplayShowHomeEnabled(true);
-            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-            mainActivity.studentInfoFragmentShown = false;
-        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("ppgllrd", "onOptionsItemSelected:<   "+item);
+        Log.d("ppgllrd", "onOptionsItemSelectedSIF  "+item);
         //mainActivity.showCurrentCourse();
         switch (item.getItemId()) {
             case android.R.id.home:
+                Log.d("ppgllrd", "onOptionsItemSelectedSIFhome  "+item);
                 // < menu in action bar clicked;
-                FragmentManager fm= getActivity().getFragmentManager();
+                FragmentManager fm = getActivity().getFragmentManager();
                 if(fm.getBackStackEntryCount()>0){
                     fm.popBackStack();
                 }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -114,6 +190,9 @@ public class StudentInfoFragment extends Fragment {
 
 
     public void showStudent(Student student) {
+
+        currentStudent = student;
+
         View view = getView();
         ImageView photo = (ImageView) view.findViewById(R.id.info_photo);
         String path = student.getPhotoPath();
@@ -151,8 +230,5 @@ public class StudentInfoFragment extends Fragment {
 
         ScrollView scrollView = (ScrollView) view.findViewById(R.id.info_scrollView);
         scrollView.fullScroll(ScrollView.FOCUS_UP);
-
-        // show name on navigation bar
-        getActivity().getActionBar().setTitle(student.getName());
     }
 }

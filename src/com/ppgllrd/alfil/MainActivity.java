@@ -18,22 +18,24 @@
 
 package com.ppgllrd.alfil;
 
-import android.app.ActionBar;
+
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
+import android.graphics.LinearGradient;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -52,14 +54,9 @@ public class MainActivity extends Activity {
 
     private Menu menu = null; // menu in actionBar
 
-    public boolean studentInfoFragmentShown = false;
-
     class ActionBarTitleController extends ActionBarDrawerToggle {
         private Activity activity;
         private DrawerLayout drawerLayout;
-        private boolean svSearchBoxVisible = false;
-        private int svDisplayOptions = 0;
-        private CharSequence svTitle = "";
         private String appTitle;
 
         public ActionBarTitleController(Activity activity, DrawerLayout drawerLayout, int drawerImageRes, int openDrawerContentDescRes, int closeDrawerContentDescRes) {
@@ -72,39 +69,33 @@ public class MainActivity extends Activity {
             drawerLayout.setDrawerListener(this);
         }
 
-        public void setTitle(String title) {
-            activity.getActionBar().setTitle(title);
-            svTitle = title;
-        }
 
         public void closeDrawer() {
             drawerLayout.closeDrawer(Gravity.LEFT); //(drawerList);
         }
 
         public void onDrawerOpened(View drawerView) {
-            svTitle = activity.getActionBar().getTitle();
             activity.getActionBar().setTitle(appTitle);
 
-            svDisplayOptions = activity.getActionBar().getDisplayOptions();
+            setDrawerIndicatorEnabled(true);
             activity.getActionBar().setDisplayShowHomeEnabled(true);
-            MenuItem search = menu.findItem(R.id.search_box);
-
-            if(search != null) {
-                svSearchBoxVisible = search.isVisible();
-                search.setVisible(false);
+            if(menu != null) {
+                MenuItem search = menu.findItem(R.id.search_box);
+                if(search != null)
+                    search.setVisible(false);
             }
+
         }
 
         public void onDrawerClosed(View view) {
-            Log.d("ppgllrd","onDrawerClosed");
-            getActionBar().setTitle(svTitle);
-            MenuItem search = menu.findItem(R.id.search_box);
-            if(search != null)
-                search.setVisible(svSearchBoxVisible);
-            getActionBar().setDisplayOptions(svDisplayOptions);
+            invalidateOptionsMenu(); // each fragment is responsible for updating menu and title
         }
     }
 
+
+    ActionBarTitleController getActionBarTitleController() {
+        return actionBarTitleController;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +118,6 @@ public class MainActivity extends Activity {
             drawerItems.add(new DrawerCourse(course));
         }
 
-
         // set up the drawer's list view with items and click listener
         drawerList.setAdapter(new DrawerAdapter(this,
                 R.layout.drawer_course_item, drawerItems));
@@ -138,50 +128,6 @@ public class MainActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        /*
-        actionBarTitleController = new ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                R.drawable.ic_drawer,
-                R.string.drawer_open,
-                R.string.drawer_close
-        ) {
-            private boolean svSearchBoxVisible = false;
-            private CharSequence svTitle = "";
-
-            public void setTitle(String title) {
-                getActionBar().setTitle(title);
-                svTitle = title;
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                svTitle = getActionBar().getTitle();
-                getActionBar().setTitle(drawerTitle);
-                MenuItem search = menu.findItem(R.id.search_box);
-
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-                if(search != null) {
-                    svSearchBoxVisible = search.isVisible();
-                    search.setVisible(false);
-                }
-            }
-
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(svTitle);
-                //invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-                MenuItem search = menu.findItem(R.id.search_box);
-                if(search != null)
-                    search.setVisible(svSearchBoxVisible);
-            }
-
-        };
-        */
-
-
-
-
         actionBarTitleController = new ActionBarTitleController(
                 this,                  /* host Activity */
                 drawerLayout,         /* DrawerLayout object */
@@ -189,11 +135,6 @@ public class MainActivity extends Activity {
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         );
-        //actionBarTitleController.setTitle("Alfil");
-        //drawerLayout.setDrawerListener(actionBarTitleController);
-
-//        selectCourse(1, savedInstanceState); // start by selecting first course
-
 
         FragmentManager fm = getFragmentManager();
 
@@ -231,6 +172,10 @@ public class MainActivity extends Activity {
         //ft.addToBackStack(null);
         ft.commit();
 
+       // ActivitySwipeDetector activitySwipeDetector = new ActivitySwipeDetector(this);
+       // DrawerLayout lowestLayout = (DrawerLayout)this.findViewById(R.id.drawer_layout);
+       // lowestLayout.setOnTouchListener(activitySwipeDetector);
+
     }
 
     @Override
@@ -246,31 +191,13 @@ public class MainActivity extends Activity {
         // ActionBarDrawerToggle will take care of this.
         Log.d("ppgllrd", "onOptionsItemSelected: "+item);
 
-        if(studentInfoFragmentShown)
-            return false;
+        if (studentInfoFragment.isVisible())
+            return false; //don't open drawer
 
         if (actionBarTitleController.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
-        /*
-        // Handle action buttons
-        switch(item.getItemId()) {
-        case R.id.action_websearch:
-            // create intent to perform web search for this planet
-            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-            intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-            // catch event that there's no activity to handle intent
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-            }
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-        */
     }
 
     /* The click listner for ListView in the navigation drawer */
@@ -292,8 +219,7 @@ public class MainActivity extends Activity {
             FragmentManager fragmentManager = getFragmentManager();
             Log.d("ppgllrd", "Count:"+fragmentManager.getBackStackEntryCount());
 
-
-            if (position != drawerSelectedIdx) {
+            if(position != drawerSelectedIdx) {
                 Log.d("ppgllrd", "YES");
                 drawerSelectedIdx = position;
 
@@ -307,40 +233,17 @@ public class MainActivity extends Activity {
                 ft.replace(R.id.list_Fragment_Placeholder, studentsListFragment, StudentsListFragment.FragmentTag);
                 //ft.addToBackStack(StudentInfoFragment.FragmentTag);
                 ft.commit();
-
-
-        /*
-                  transaction.setCustomAnimations(R.anim.slide_in_right,
-                        R.anim.slide_out_left, android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right);
-         */
-
-
-
-
-                //ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-
-
-      /*
-
-                if(fragmentManager.getBackStackEntryCount()==0)
-                    fragmentManager.beginTransaction().
-                            add(R.id.content_frame, studentsListFragment, StudentsListFragment.FragmentTag).
-                            addToBackStack(StudentsListFragment.FragmentTag).
-                                    commit();
-                else
-                fragmentManager.beginTransaction().
-                        replace(R.id.content_frame, studentsListFragment, StudentsListFragment.FragmentTag).
-                        // addToBackStack(StudentsListFragment.FragmentTag).
-                        commit();
-    */
             }
             Log.d("ppgllrd", "YYY");
 
             actionBarTitleController.closeDrawer();
-            actionBarTitleController.setTitle(drawerCourse.getCourse().getName());
 
+            if(studentInfoFragment.isVisible()) {
+                FragmentManager fm = getFragmentManager();
+                if(fm.getBackStackEntryCount()>0){
+                    fm.popBackStack();
+                }
+            }
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.hide(studentInfoFragment);
             ft.show(studentsListFragment);
@@ -352,11 +255,6 @@ public class MainActivity extends Activity {
         }
         Log.d("ppgllrd", "ZZZ");
     }
-
-    public void showCurrentCourse() {
-        selectCourse(drawerSelectedIdx);
-    }
-
 
     /**
      * When using the ActionBarDrawerToggle, you must call it during

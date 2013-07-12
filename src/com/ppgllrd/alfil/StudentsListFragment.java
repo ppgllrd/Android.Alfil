@@ -2,6 +2,7 @@ package com.ppgllrd.alfil;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.app.SearchManager;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -33,9 +35,8 @@ public class StudentsListFragment extends ListFragment {
 
     private StudentsListViewAdapter adapter;
 
-    private Menu menu = null; // menu in actionBar
-
     private MainActivity mainActivity;
+
 
     public StudentsListFragment() {
         listItems = new ArrayList<Student>();
@@ -75,36 +76,91 @@ public class StudentsListFragment extends ListFragment {
     }
 
 
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
 
+        /*
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search_box).getActionView();
+        String query = "";
+        if (searchView != null) {
+            query =searchView.getQuery().toString();
+        }
+*/
+
+
+
+        Log.d("ppgllrd", "onCreateOptionsMenuSLF" + menu+ " " + query);
+        super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.main, menu);
-        this.menu = menu;
+
+        Bundle bundle = getArguments();
+        Course course = bundle.getParcelable(ARG_GROUP_STUDENTS_COURSE);
+        mainActivity.getActionBar().setTitle(course.getName());
+
+        mainActivity.getActionBarTitleController().setDrawerIndicatorEnabled(true); // enable drawer indicator
+
+        /*
+
+        if(!query.isEmpty()) {
+            SearchView searchView = (SearchView) menu.findItem(R.id.search_box).getActionView();
+            searchView.setQuery(query, false);
+        }
+
+*/
         setOnQueryTextListener(menu);
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("ppgllrd", "onOptionsItemSelectedSLW  "+item);
+        //mainActivity.showCurrentCourse();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Log.d("ppgllrd", "onOptionsItemSelectedSLVhome  "+item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+    private String query = "";
+
     private boolean setFilter(String query) {
-        Log.d("ppgllrd", "setFilter" + query);
-        adapter.getFilter().filter(StringUtils.removeAccents(query.toString().trim()));
+        Log.d("ppgllrd", "setFilterSLF" + query);
+        this.query = query;
+        if(adapter != null) {
+        Filter currentFilter = adapter.getFilter();
+        if(currentFilter != null)
+            currentFilter.filter(StringUtils.removeAccents(query.toString().trim()));
         //Note that filter uses toString in Student
+        }
         return true;
     }
 
     public void setOnQueryTextListener(Menu menu) {
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search_box).getActionView();
-        Log.d("ppgllrd", "setOnQueryTextListener" + searchView + menu + getActivity());
+        MenuItem menuItem = menu.findItem(R.id.search_box);
+        final SearchView searchView = (SearchView) menuItem.getActionView();
+        Log.d("ppgllrd", "setOnQueryTextListenerSLF" + searchView.getQuery().toString() + menu + getActivity());
         if (searchView != null) {
-            searchView.setQuery(null, true);
-            Log.d("ppgllrd", "setOnQueryTextListener" + searchView.getQuery());
+            Log.d("ppgllrd", "setOnQueryTextListenerSLF2" + searchView.getQuery());
+
+            //searchView.setQuery(query, false);
+            if(!query.isEmpty())
+                menuItem.expandActionView();
+            searchView.setQuery(query, false);
 
             SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
             searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             searchView.setIconifiedByDefault(true);
             SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-                public boolean onQueryTextChange(String newText) {
-                    Log.d("ppgllrd", "onQueryTextChange" + newText);
-                    return setFilter(newText);
+                public boolean onQueryTextChange(String query) {
+                    Log.d("ppgllrd", "onQueryTextChange" + query);
+                    return setFilter(query);
                 }
 
                 public boolean onQueryTextSubmit(String query) {
@@ -117,19 +173,22 @@ public class StudentsListFragment extends ListFragment {
 
             int currentApiVersion = Build.VERSION.SDK_INT;
             if (currentApiVersion >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                MenuItem menuItem = menu.findItem(R.id.search_box);
+
                 MenuItem.OnActionExpandListener onActionExpandListener = new MenuItem.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         Log.d("ppgllrd", "onMenuItemActionCollapse");
                         searchView.setQuery(null, true);
+                        setFilter("");
                         // Return true to collapse action view
                         return true;
                     }
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
-                        Log.d("ppgllrd", "onMenuItemActionExpand");
+                        Log.d("ppgllrd", "onMenuItemActionExpand "+query);
+                        //searchView.setQuery(query, false);
+                        searchView.setQueryHint("type to search");
                         return true;
                     }
                 };
@@ -139,46 +198,51 @@ public class StudentsListFragment extends ListFragment {
                 searchView.setOnCloseListener(new SearchView.OnCloseListener() {
                     @Override
                     public boolean onClose() {
-                        searchView.setQuery("", true);
+                        //searchView.setQuery("", true);
                         return false; //to clear and dismiss
                     }
                 });
             }
+           // searchView.setQuery(query, true);
         }
     }
 
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.d("ppgllrd", "setUserVisibleHint> "+hidden);
+        /*
+        if (!hidden) {
+            getActivity().getActionBar().setDisplayShowHomeEnabled(false);
+            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+        }*/
+    }
+
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         //Student student = listItems.get(position);
         Student student = adapter.getItem(position);
-
-                    /*
-            int ident = student.getPhoto();
-            for(Student st : listItems)
-                    if(st.getPhoto() == ident) {
-                        student = st;
-                        break;
-                    }*/
-
-
         mainActivity.studentInfoFragment.showStudent(student);
-
-
 
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         //ft.addToBackStack(null);
-        ft.hide(mainActivity.studentsListFragment);
+
+
+        //ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+
+        ft.setCustomAnimations(R.anim.slide_in_right,
+                R.anim.none, R.anim.none,
+                R.anim.slide_out_right);
+
         ft.show(mainActivity.studentInfoFragment);
+        ft.hide(mainActivity.studentsListFragment);
         ft.addToBackStack(StudentInfoFragment.FragmentTag);
 
 
-        /*
-                  transaction.setCustomAnimations(R.anim.slide_in_right,
-                        R.anim.slide_out_left, android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right);
-         */
+
+
 
 
 
